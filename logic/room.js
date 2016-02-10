@@ -6,10 +6,11 @@ var _ = require('underscore');
 var Hall = (function(){
 	/**
 	* 游戏大厅
-	* @public
-	* @class
+	* @constructs Hall
+	* @param {string} gameName - 大厅所对应的游戏名称
+	* @param {string} [status='close'] - 大厅状态 默认为'close'
 	*/
-	var cls = function(gameName) {
+	var cls = function(gameName,status) {
 		/**
 		* 大厅唯一id
 		* @member id
@@ -33,7 +34,7 @@ var Hall = (function(){
 		* @member status
 		* @memberof Hall.prototype
 		*/
-		this.status = null;
+		this.status = status || 'close';
 		/**
 		* 大厅对应的游戏
 		* @member gameName
@@ -51,9 +52,8 @@ var Hall = (function(){
 	// public
 	/**
 	* 开启大厅
-	* @public
+	* @public open
 	* @methodof Hall.prototype
-	* open
 	*/
 	publicHandler.open = function(){
 		this.status = 'open';
