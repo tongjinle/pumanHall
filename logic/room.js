@@ -1,11 +1,45 @@
+/**
+* @author tongjinle <1328192478@qq.com>
+*/
 var _ = require('underscore');
+
 var Hall = (function(){
-	var cls = function() {
-		this.id = null;
+	/**
+	* 游戏大厅
+	* @public
+	* @class
+	*/
+	var cls = function(gameName) {
+		/**
+		* 大厅唯一id
+		* @member id
+		* @memberof Hall.prototype
+		*/
+		this.id = _.uniqueId();
+		/**
+		* 大厅中房间id列表
+		* @member roomIdList
+		* @memberof Hall.prototype
+		*/
 		this.roomIdList = [];
+		/**
+		* 大厅中玩家id列表
+		* @member playerIdList
+		* @memberof Hall.prototype
+		*/
 		this.playerIdList = [];
+		/**
+		* 大厅状态,分为"开启"和"关闭"两个状态
+		* @member status
+		* @memberof Hall.prototype
+		*/
 		this.status = null;
-		this.gameName = null;
+		/**
+		* 大厅对应的游戏
+		* @member gameName
+		* @memberof Hall.prototype
+		*/
+		this.gameName = gameName;
 	};
 
 	var staticHandler = cls;
@@ -15,6 +49,12 @@ var Hall = (function(){
 	// private
 
 	// public
+	/**
+	* 开启大厅
+	* @public
+	* @methodof Hall.prototype
+	* open
+	*/
 	publicHandler.open = function(){
 		this.status = 'open';
 	};
