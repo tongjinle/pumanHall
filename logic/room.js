@@ -2,7 +2,6 @@
 * @author tongjinle <1328192478@qq.com>
 */
 var _ = require('underscore');
-
 var Hall = (function(){
 	/**
 	* 游戏大厅
@@ -14,37 +13,36 @@ var Hall = (function(){
 		/**
 		* 大厅唯一id
 		* @member id
-		* @memberof Hall.prototype
+		* @memberof Hall#
 		*/
 		this.id = _.uniqueId();
 		/**
 		* 大厅中房间id列表
 		* @member roomIdList
-		* @memberof Hall.prototype
+		* @memberof Hall#
 		*/
 		this.roomIdList = [];
 		/**
 		* 大厅中玩家id列表
 		* @member playerIdList
-		* @memberof Hall.prototype
+		* @memberof Hall#
 		*/
 		this.playerIdList = [];
 		/**
 		* 大厅状态,分为"开启"和"关闭"两个状态
 		* @member status
-		* @memberof Hall.prototype
+		* @memberof Hall#
 		*/
 		this.status = status || 'close';
 		/**
 		* 大厅对应的游戏
-		* @member gameName
-		* @memberof Hall.prototype
+		* @member gameName2
+		* @memberof Hall#
 		*/
 		this.gameName = gameName;
 	};
 
 	var staticHandler = cls;
-	var publicHandler = cls.prototype;
 
 	// static
 	// private
@@ -52,32 +50,56 @@ var Hall = (function(){
 	// public
 	/**
 	* 开启大厅
-	* @public open
-	* @methodof Hall.prototype
+	* @methodof Hall#
 	*/
-	publicHandler.open = function(){
+	cls.prototype.open = function(){
 		this.status = 'open';
 	};
 
-	publicHandler.close = function(){
+	/**
+	* 关闭大厅
+	* @methodof Hall#
+	*/
+	cls.prototype.close = function(){
 		this.status = 'close';
 	};
 
-	publicHandler.addRoom = function(roomId){
+	/**
+	* 增加房间
+	* @methodof Hall#
+	* @param {number} roomId - 房间编号
+	*/
+	cls.prototype.addRoom = function(roomId){
 		this.roomIdList.push(roomId);
 		this.roomIdList = _.uniq(this.roomIdList);
 	};
 
-	publicHandler.removeRoom = function(roomId){
+	/**
+	* 删除房间
+	* @methodof Hall#
+	* @param {number} roomId - 房间编号
+	*/
+	cls.prototype.removeRoom = function(roomId){
 		this.roomIdList = _.without(this.roomIdList,function(n){return n == roomId;});
 	};
 
-	publicHandler.addPlayer = function(pId){
+	/**
+	* 增加玩家
+	* @methodof Hall#
+	* @param {number} pId - 玩家编号
+	*/
+	cls.prototype.addPlayer = function(pId){
 		this.playerIdList.push(pId);
 		this.playerIdList = _.uniq(this.playerIdList);
 	};
 
-	publicHandler.removePlayer = function(pId){
+
+	/**
+	* 删除玩家
+	* @methodof Hall#
+	* @param {number} pId - 玩家编号
+	*/
+	cls.prototype.removePlayer = function(pId){
 		this.playerIdList = _.without(this.playerIdList,function(n){ return n == pId;});
 	};
 
