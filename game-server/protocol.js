@@ -5,15 +5,11 @@ userHandler
 	* 查询玩家信息
 	-> getPlayerList()
 
-
 userRemote
 	* 登录
 	-> login()
 	* 登出
 	-> logout()
-	* 
-	-> getMember()
-	** userName忽略的时候,返回所有玩家信息
 	
 2 hall server (大厅服务器)
 hallHandler
@@ -21,11 +17,16 @@ hallHandler
 		-> getRoomList()
 	* 获取玩家信息
 		-> getPlayerList()
+		
 roomHandler
 	* 获取玩家信息
 		-> getPlayerList()
 	* 准备游戏
 		-> beReady()
+	* 发送action给游戏逻辑
+		-> sendActMsg()
+	* 放弃游戏
+		-> quitGame()
 	
 hallRemote
 	* 进入大厅

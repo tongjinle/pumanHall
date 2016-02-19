@@ -31,12 +31,15 @@ var Handler = (function(){
 
 	// 强行退出游戏
 	publicHandler.quitGame = function(msg,session,next){
-		
+		var pId = session.uid;
+		var p = playerMgr.getPlayer(pId);
+		var info = p.quitGame();
+		next(null,info);
 	};
 
 	// 退出房间
-	publicHandler.quitGame = function(msg,session,next){
-
+	publicHandler.quitRoom = function(msg,session,next){
+		var 
 	};
 
 	return cls;
