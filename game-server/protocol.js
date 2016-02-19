@@ -50,6 +50,15 @@ userRemote
 		通知玩家登出
 		如果玩家在大厅,则大厅发出"退出大厅"的广播
 		如果玩家在房间,则房间发出"退出房间"的广播
+	* 改变状态
+	-> update()
+		req:
+		{
+			changes:{
+				key:String,
+				value:any
+			}[]
+		}
 
 
 	
