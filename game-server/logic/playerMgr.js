@@ -7,26 +7,52 @@ var Handler = (function(){
 	var publicHandler = cls.prototype;
 
 	// static
+	var _ins;
+	staticHandler.create = function(){
+		return _ins || (_ins = new cls());
+	};
 
 	// private
+	// mock database
 	var database = [
-		{id:1000,username:'dino',pwd:''},
-		{id:1001,username:'tongjinle',pwd:'shanghai'}
+		{username:'dino',pwd:''},
+		{username:'tongjinle',pwd:'shanghai'}
 	];
 
 	// public
-	publicHandler.add= function(user,pwd,next){
+	publicHandler.add= function(username,pwd,next){
 		var flag = false;
-		var player = _.find(database,function(n){return n.username==username && n.pwd == pwd;});
+		var data = _.find(database,function(n){return n.username==username && n.pwd == pwd;});
+		var p = _.find(this.playerList,function(n){return n.username == username; });
+		// mock
 		setTimeout(function(){
-			if(player){
-				this.playerList.push(new Player)
+			if(data && !p){
+				p = new Player(username);
+				this.playerList.push(p);
+				next(null,p);
+			}else{
+				next(true);
 			}
-			player ? next(null,player) : next(true);
 		},Math.random()*600);
 	};
 
-	publicHandler.remove = 
+	publicHandler.remove = function(id,next){
+		var p = _.find(this.playerList,function(n){return n.id == id;});
+		setTimeout(function(){
+			if(p){
+				this.playerList = _.without(this.playerList,function(n){return n==p;});
+				next(null,p);
+			}else{
+				next(true);
+			}
+		},Math.random()*600);
+	};
+
+	publicHandler.find = function(id){
+		var p = _.find(this.playerList,function(n){return n.id == id;});
+		return p;
+	};
+
 
 	
 

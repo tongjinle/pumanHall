@@ -1,9 +1,9 @@
-var UserMgr = require('../../../logic/userMgr');
+var PlayerMgr = require('../../../../logic/playerMgr');
 
 var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
-		this.userMgr = new UserMgr();
+		this.playerMgr = new PlayerMgr();
 		this.channel = this.app.get('channelService').createChannel('userCenter');
 	};
 
@@ -17,7 +17,9 @@ var Handler = (function(){
 
 	// public
 	publicHandler.login = function(username,pwd,sid,next){
-		
+		this.playerMgr.add(username,pwd,function(err,p){
+
+		});
 	};
 
 	publicHandler.logout = function(){};

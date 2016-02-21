@@ -1,10 +1,11 @@
 var _ = require('underscore');
+var PlayerMgr = require('../../../../logic/playerMgr');
 
 
 var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
-		this.userMgr = new UserMgr();
+		this.playerMgr = PlayerMgr.create();
 	};
 
 	var staticHandler = cls;
@@ -18,7 +19,7 @@ var Handler = (function(){
 	publicHandler.getPlayerList = function(msg,session,next){
 		var playerIdList = session.playerIdList;
 
-		var playerList = this.userMgr.getPlayerList();
+		var playerList = this.playerMgr.getPlayerList();
 		var info = _.map(function(n){
 			return {
 				id:n.id,

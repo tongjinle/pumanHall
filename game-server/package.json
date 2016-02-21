@@ -3,7 +3,8 @@
     "version":"0.0.1",
     "private":false,
     "dependencies":{
-        "pomelo":"1.2.2"
+        "pomelo":"1.2.2",
+        "underscore":"^1.8.3"
     }
 }
 
