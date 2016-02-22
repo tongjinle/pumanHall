@@ -3,7 +3,7 @@ var PlayerMgr = require('../../../../logic/playerMgr');
 var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
-		this.playerMgr = new PlayerMgr();
+		this.playerMgr = PlayerMgr.create();
 		this.channel = this.app.get('channelService').createChannel('userCenter');
 	};
 
@@ -32,7 +32,25 @@ var Handler = (function(){
 		});
 	};
 
-	publicHandler.logout = function(){};
+	publicHandler.logout = function(username,sid,next){
+		var self = this;
+		self.playerMgr.remove(username,function(err,p){
+			if(err){
+				next(err);
+			}else{
+				self.channel.leave(username,sid);
+				next(null,{
+					flag:true,
+					player:p
+				});
+			}
+		});
+	};
+
+	publicHandler.getPlayerList = function(next){
+		var self = this;
+		next(null,self.playerMgr.find());
+	};
 
 	publicHandler.update = function(){};
 

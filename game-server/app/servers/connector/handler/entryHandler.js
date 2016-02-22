@@ -3,8 +3,8 @@ var EventProxy = require('eventproxy');
 var Handler = (function() {
 	var cls = function(app) {
 		this.app = app;
-		this.ep = null;
-		this.listen();
+		this._ep = null;
+		this._listen();
 	};
 
 	var staticHandler = cls;
@@ -15,27 +15,45 @@ var Handler = (function() {
 	// private
 
 	// public
-	publicHandler.listen = function() {
+	publicHandler._listen = function() {
 		var self = this;
-		self.ep = new EventProxy();
+		self._ep = new EventProxy();
 
-		self.ep.on('onEnter', function(data) {
+		self._ep.on('onEnter', function(data) {
 			data.session.bind(data.username);
-			self.app.rpc.user.userRemote.login(data.session, data.username, data.pwd, data.sid, function(err,info) {
-				console.warn(err,info);
-				data.next(null, info);
+			self.app.rpc.user.userRemote.login(data.session, data.username, data.pwd, data.session.get('sid'), function(err, msg) {
+				data.next(null, msg);
 			});
+		});
+
+		self._ep.on('onLeave', function(data) {
+			self.app.rpc.user.userRemote.logout(data.session, data.username, data.session.get('sid'), null);
 		});
 	};
 
 
 	publicHandler.entry = function(msg, session, next) {
 		var self = this;
-		self.ep.fire('onEnter', {
+		var sid = self.app.get('serverId');
+		session.set('sid', sid);
+		session.push('sid', function(err) {
+			if (err) {
+				console.error('set sid for session service failed! error is : %j', err.stack);
+			}
+		});
+
+		session.on('closed', function(session) {
+			self._ep.fire('onLeave', {
+				username: session.uid,
+				session: session,
+			});
+		});
+
+
+		self._ep.fire('onEnter', {
 			username: msg.username,
 			pwd: msg.pwd,
 			session: session,
-			sid: self.app.get('serverId'),
 			next: next
 		});
 	};

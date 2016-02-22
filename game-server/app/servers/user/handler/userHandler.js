@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var PlayerMgr = require('../../../../logic/playerMgr');
+// var userRemote = require('../remote/userRemote');
 
 
 var Handler = (function(){
@@ -17,22 +18,21 @@ var Handler = (function(){
 
 	// public
 	publicHandler.getPlayerList = function(msg,session,next){
-		var playerIdList = session.playerIdList;
+		var self = this;
+		self.app.rpc.user.userRemote.getPlayerList(session,next);
+		return;
+		
+		var playerList = self.playerMgr.find();
+		next(null,{playerList:playerList});
+		return;
+	};
 
-		var playerList = this.playerMgr.getPlayerList();
-		var info = _.map(function(n){
-			return {
-				id:n.id,
-				name:n.name,
-				hallId:n.hallId,
-				hallName:n.hallName,
-				roomId:n.roomId,
-				roomName:n.roomName,
-				gameName:n.gameName,
-				gameStatus:n.gameStatus
-			};
-		});
-		next(null,{playerList:info})
+	publicHandler.logout = function(msg,session,next){
+		var self = this;
+		var username = session.uid;
+		console.log(">>>>>>>",username);
+		self.app.rpc.user.userRemote.logout(session,username,session.sid,next);
+		// userRemote.logout(username,next);
 	};
 
 	return cls;
