@@ -17,8 +17,18 @@ var Handler = (function(){
 
 	// public
 	publicHandler.login = function(username,pwd,sid,next){
-		this.playerMgr.add(username,pwd,function(err,p){
-
+		var self = this;
+		self.playerMgr.add(username,pwd,function(err,p){
+			console.warn(err,p);
+			if(err){
+				next(err);
+			}else{
+				self.channel.add(username,sid);
+				next(null,{
+					flag:!!p,
+					username:username
+				});
+			}
 		});
 	};
 

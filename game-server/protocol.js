@@ -36,7 +36,7 @@ userRemote
 		res:
 		{
 			flag:Boolean,
-			id?:Number
+			username?:String
 		}
 	* 登出
 	-> logout()

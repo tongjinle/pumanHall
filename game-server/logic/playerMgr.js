@@ -1,3 +1,6 @@
+var _ = require('underscore');
+var Player = require('./player');
+
 var Handler = (function(){
 	var cls = function() {
 		this.playerList = [];	
@@ -21,14 +24,15 @@ var Handler = (function(){
 
 	// public
 	publicHandler.add= function(username,pwd,next){
+		var self = this;
 		var flag = false;
 		var data = _.find(database,function(n){return n.username==username && n.pwd == pwd;});
-		var p = _.find(this.playerList,function(n){return n.username == username; });
+		var p = self.find(username);
 		// mock
 		setTimeout(function(){
 			if(data && !p){
 				p = new Player(username);
-				this.playerList.push(p);
+				self.playerList.push(p);
 				next(null,p);
 			}else{
 				next(true);
@@ -36,11 +40,12 @@ var Handler = (function(){
 		},Math.random()*600);
 	};
 
-	publicHandler.remove = function(id,next){
-		var p = _.find(this.playerList,function(n){return n.id == id;});
+	publicHandler.remove = function(username,next){
+		var self = this;
+		var p = self.find(username);
 		setTimeout(function(){
 			if(p){
-				this.playerList = _.without(this.playerList,function(n){return n==p;});
+				self.playerList = _.without(self.playerList,function(n){return n==p;});
 				next(null,p);
 			}else{
 				next(true);
@@ -48,14 +53,15 @@ var Handler = (function(){
 		},Math.random()*600);
 	};
 
-	publicHandler.find = function(id){
-		var p = _.find(this.playerList,function(n){return n.id == id;});
+	publicHandler.find = function(name){
+		var self = this;
+		if(name === undefined){return self.playerList;}
+		var p = _.find(self.playerList,function(n){return n.name == name;});
 		return p;
 	};
-
-
-	
 
 	return cls;
 
 }).call(this);
+
+module.exports = Handler;

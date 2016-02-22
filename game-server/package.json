@@ -1,10 +1,10 @@
 {
-    "name":"pumanHall",
-    "version":"0.0.1",
-    "private":false,
-    "dependencies":{
-        "pomelo":"1.2.2",
-        "underscore":"^1.8.3"
-    }
+  "name": "pumanHall",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "eventproxy": "^0.3.4",
+    "pomelo": "1.2.2",
+    "underscore": "^1.8.3"
+  }
 }
-
