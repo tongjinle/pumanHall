@@ -2,13 +2,29 @@ var pomelo = window.pomelo;
 var host = "127.0.0.1";
 var port = "3010";
 
-function init() {
+var playerList = [];
+
+function init(next) {
 	pomelo.init({
 		host: host,
 		port: port,
 		log: true
 	}, function() {
-		console.log('pomelo init');
+		next();
+	});
+}
+
+function initPushMessage(){
+	pomelo.on('addPlayer',function(p){
+		playerList.push(p);
+		console.warn('after addPlayer->',playerList);
+	});
+
+	pomelo.on('removePlayer',function(p){
+		playerList = _.filter(playerList,function(n){
+			return n.name != p.name;
+		});
+		console.warn('after removePlayer->',playerList);
 	});
 }
 
@@ -42,5 +58,9 @@ function listAll(){
 
 
 window.onload = function(){
-	init();
+	init(function(){
+		console.log('pomelo init');
+
+		initPushMessage();
+	});
 };

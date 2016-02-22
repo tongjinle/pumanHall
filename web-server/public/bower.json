@@ -1,0 +1,21 @@
+{
+  "name": "pumanHall",
+  "description": "",
+  "main": "",
+  "authors": [
+    "tongjinle <1328192478@qq.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/tongjinle/pumanHall",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "underscore": "^1.8.3"
+  }
+}

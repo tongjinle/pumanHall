@@ -19,11 +19,12 @@ var Handler = (function(){
 	publicHandler.login = function(username,pwd,sid,next){
 		var self = this;
 		self.playerMgr.add(username,pwd,function(err,p){
-			console.warn(err,p);
+			// console.warn(err,p);
 			if(err){
 				next(err);
 			}else{
 				self.channel.add(username,sid);
+				self.channel.pushMessage('addPlayer',p);
 				next(null,{
 					flag:!!p,
 					username:username
@@ -39,6 +40,7 @@ var Handler = (function(){
 				next(err);
 			}else{
 				self.channel.leave(username,sid);
+				self.channel.pushMessage('removePlayer',p);
 				next(null,{
 					flag:true,
 					player:p

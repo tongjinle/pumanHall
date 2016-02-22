@@ -1,3 +1,4 @@
 node_modules/
 out/
 game-server/logs/
+web-server/public/bower_components/
