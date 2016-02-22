@@ -16,22 +16,7 @@
     <script type="text/javascript">
       require('boot');
     </script> 
-    <script type="text/javascript">
-      var pomelo = window.pomelo;
-      var host = "127.0.0.1";
-      var port = "3010";
-      function show() {
-        pomelo.init({
-          host: host,
-          port: port,
-          log: true
-        }, function() {
-        pomelo.request("connector.entryHandler.entry", "hello pomelo", function(data) {
-            alert(data.msg);
-          });
-        });
-      }
-    </script>
+    <script type="text/javascript" src="index.js"> </script>
   </head>
   <body>
     <div class="g-doc">
