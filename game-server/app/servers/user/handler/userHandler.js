@@ -30,9 +30,7 @@ var Handler = (function(){
 	publicHandler.logout = function(msg,session,next){
 		var self = this;
 		var username = session.uid;
-		console.log(">>>>>>>",username);
 		self.app.rpc.user.userRemote.logout(session,username,session.get('sid'),next);
-		// userRemote.logout(username,next);
 	};
 
 	publicHandler.update = function(msg,session,next){

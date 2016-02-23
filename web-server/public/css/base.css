@@ -39,8 +39,12 @@
   padding: 150px;
   width: 800px;
   margin-left: 50px;
-  font-size: 50pt;
+  font-size: 18pt;
   font-style: italic;
+}
+
+.g-content td{
+  width:200px;
 }
 
 .g-link {

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": false,
   "dependencies": {
+    "async": "^1.5.2",
     "eventproxy": "^0.3.4",
     "pomelo": "1.2.2",
     "underscore": "^1.8.3"

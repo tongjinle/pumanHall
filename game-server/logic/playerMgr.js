@@ -17,13 +17,13 @@ var Handler = (function() {
 
 	// private
 	// mock database
-	var database = [{
-		username: 'dino',
-		pwd: ''
-	}, {
-		username: 'tongjinle',
-		pwd: 'shanghai'
-	}];
+	var database = [
+		{username: 'dino', pwd: 'test123'},
+		{username: 'dino2', pwd: 'test123'},
+		{username: 'dino3', pwd: 'test123'},
+		{username: 'dino4', pwd: 'test123'},
+		{username: 'dino5', pwd: 'test123456'}
+	];
 
 	// public
 	publicHandler.add = function(username, pwd, next) {
@@ -42,13 +42,13 @@ var Handler = (function() {
 			} else {
 				next(true);
 			}
-		}, Math.random() * 600);
+		}, Math.random() *300);
 	};
 
 	publicHandler.remove = function(username, next) {
 		var self = this;
 		var p = self.find(username);
-		console.warn('playerMgr.remove', username, p);
+		console.warn('playerMgr.remove', {'wantToDel':username,'ins': p});
 		setTimeout(function() {
 			if (p) {
 				self.playerList = _.filter(self.playerList, function(n) {
@@ -59,7 +59,7 @@ var Handler = (function() {
 			} else {
 				next(true);
 			}
-		}, Math.random() * 600);
+		}, Math.random() * 300);
 	};
 
 	publicHandler.find = function(username) {
