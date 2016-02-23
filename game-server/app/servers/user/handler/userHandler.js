@@ -35,6 +35,14 @@ var Handler = (function(){
 		// userRemote.logout(username,next);
 	};
 
+	publicHandler.update = function(msg,session,next){
+		var self = this;
+		var username = session.uid;
+		var changes = msg.changes;
+		self.app.rpc.user.userRemote.update(session,username,changes,next);
+
+	};
+
 	return cls;
 
 }).call(this);

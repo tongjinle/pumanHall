@@ -48,6 +48,14 @@ function logout(){
 	});
 }
 
+function update(){
+	var route = 'user.userHandler.update';
+	var msg = {changes:{gameStatus:2}};
+	pomelo.request(route,msg,function(data){
+		console.warn(data);
+	});
+}
+
 function listAll(){
 	var route = 'user.userHandler.getPlayerList';
 	var msg = {};

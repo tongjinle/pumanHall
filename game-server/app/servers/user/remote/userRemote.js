@@ -54,7 +54,18 @@ var Handler = (function(){
 		next(null,self.playerMgr.find());
 	};
 
-	publicHandler.update = function(){};
+	publicHandler.update = function(username,changes,next){
+		var self = this;
+		self.playerMgr.update(username,changes,function(err,p){
+			if(!err){
+				self.channel.pushMessage('updatePlayer',p);
+			}
+			next(null,{
+				flag:!err,
+				player:p
+			});
+		});
+	};
 
 	return cls;
 

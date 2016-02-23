@@ -62,15 +62,28 @@ var Handler = (function() {
 		}, Math.random() * 600);
 	};
 
-	publicHandler.find = function(name) {
+	publicHandler.find = function(username) {
 		var self = this;
-		if (name === undefined) {
+		if (username === undefined) {
 			return self.playerList;
 		}
 		var p = _.find(self.playerList, function(n) {
-			return n.name == name;
+			return n.name == username;
 		});
 		return p;
+	};
+
+	publicHandler.update = function(username,changes,next){
+		var self = this;
+		var p = this.find(username);
+		if(p){
+			_.each(changes,function(v,k){
+				p[k]=v;
+			});
+			next(null,p);
+		}else{
+			next(true);
+		}
 	};
 
 	return cls;
