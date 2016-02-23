@@ -23,6 +23,7 @@ var Handler = (function(){
 			if(err){
 				next(err);
 			}else{
+				console.warn('>>> channel add : '+username);
 				self.channel.add(username,sid);
 				self.channel.pushMessage('addPlayer',p);
 				next(null,{
@@ -36,16 +37,15 @@ var Handler = (function(){
 	publicHandler.logout = function(username,sid,next){
 		var self = this;
 		self.playerMgr.remove(username,function(err,p){
-			if(err){
-				next(err);
-			}else{
-				self.channel.leave(username,sid);
+			// 此处err表示是否删除player成功
+			if(!err){
 				self.channel.pushMessage('removePlayer',p);
-				next(null,{
-					flag:true,
-					player:p
-				});
+				self.channel.leave(username,sid);
 			}
+			next(null,{
+				flag:!err,
+				player:p
+			});
 		});
 	};
 
