@@ -20,18 +20,15 @@ var Handler = (function(){
 		var self = this;
 		self.playerMgr.add(username,pwd,function(err,p){
 			console.warn('>>>>>>login',err,p);
-			if(err){
-				next(err);
-			}else{
+			if(!err){
+				console.warn('>>> channel add : '+username+","+sid,self.channel.getMembers());
 				self.channel.add(username,sid);
 				self.channel.pushMessage('addPlayer',p);
-				
-				console.warn('>>> channel add : '+username+","+sid,self.channel.getMembers());
-				next(null,{
-					flag:!!p,
-					username:username
-				});
 			}
+			next(null,{
+				flag:!!p,
+				username:username
+			});
 		});
 	};
 
