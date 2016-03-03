@@ -13,6 +13,7 @@ window.onload = function() {
 				pwd: $scope.pwd
 			};
 			pomelo.request(route, msg, function(data){
+				console.warn(data);
 				if(data.flag){
 					$scope.isLogin = true;
 				}
@@ -63,6 +64,14 @@ window.onload = function() {
 
 		init(function(){
 			// push message
+
+			pomelo.on('getPlayerList', function(pList) {
+				$scope.playerList=pList;
+				$scope.$apply();
+				console.warn('after getPlayerList->', $scope.playerList);
+			});
+
+
 			pomelo.on('addPlayer', function(p) {
 				$scope.playerList.push(p);
 				$scope.$apply();

@@ -1,3 +1,4 @@
+var async = require('async');
 var PlayerMgr = require('../../../../logic/playerMgr');
 
 var Handler = (function(){
@@ -23,6 +24,7 @@ var Handler = (function(){
 			if(!err){
 				console.warn('>>> channel add : '+username+","+sid,self.channel.getMembers());
 				self.channel.add(username,sid);
+				self.app.get('channelService').pushMessageByUids('getPlayerList',self.playerMgr.find(),[{uid:username,sid:sid}]);
 				self.channel.pushMessage('addPlayer',p);
 			}
 			next(null,{
