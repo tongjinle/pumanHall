@@ -1,5 +1,6 @@
 var async = require('async');
 var EventProxy = require('eventproxy');
+var _ = require('underscore');
 
 var Handler = (function() {
 	var cls = function(app) {
@@ -34,16 +35,6 @@ var Handler = (function() {
 
 			var msg = {};
 			async.series([
-				// kick old uid
-				function(cb){
-					console.warn('kick old uid:',session.uid);
-					if(!session.uid){
-						cb();
-						return;
-					}
-					// self.app.get('sessionService').kick(session.uid,cb);
-					session.unbind(session.uid,cb);
-				},
 				// userRemote logout
 				function(cb){
 					console.warn('userRemote logout');
@@ -51,7 +42,23 @@ var Handler = (function() {
 						cb();
 						return;
 					}
-					self.app.rpc.user.userRemote.logout(session, session.uid, sid, cb);
+					self.app.rpc.user.userRemote.logout(session, session.uid, session.sid, cb);
+				},
+				// kick old uid
+				function(cb){
+					if(!session.uid){
+						cb();
+						return;
+					}
+					// self.app.get('sessionService').kick(session.uid,cb);
+					console.warn('kick old uid:',session.uid);
+					session.unbind(session.uid,cb);
+				},
+				function(cb){
+					self.app.rpc.user.userRemote.getPlayerList(session,function(err,data){
+						console.warn('userRemote getPlayerList:',_.map(data,function(n){return n.name;}));
+						cb();
+					});
 				},
 				// bind uid
 				function(cb){
