@@ -17,7 +17,7 @@ var Handler = (function() {
 
 	// private
 	// mock database
-	var database = [
+	var database = publicHandler._database = [
 		{username: 'dino', pwd: 'test123'},
 		{username: 'dino2', pwd: 'test123'},
 		{username: 'dino3', pwd: 'test123'},

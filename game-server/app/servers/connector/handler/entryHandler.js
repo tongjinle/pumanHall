@@ -34,27 +34,39 @@ var Handler = (function() {
 
 			var msg = {};
 			async.series([
-				// 剔除原有的uid
+				// kick old uid
 				function(cb){
-					self.app.get('sessionService').kick(username,cb);
+					console.warn('kick old uid:',session.uid);
+					if(!session.uid){
+						cb();
+						return;
+					}
+					// self.app.get('sessionService').kick(session.uid,cb);
+					session.unbind(session.uid,cb);
 				},
 				// userRemote logout
 				function(cb){
-					self.app.rpc.user.userRemote.logout(session, username, sid, function(){
+					console.warn('userRemote logout');
+					if(!session.uid){
 						cb();
-					});
+						return;
+					}
+					self.app.rpc.user.userRemote.logout(session, session.uid, sid, cb);
 				},
 				// bind uid
 				function(cb){
+					console.warn('bind uid');
 					session.bind(username,cb);
 				},
 				// push session
 				function(cb){
+					console.warn('push session');
 					session.set('sid',sid);
 					session.pushAll(cb);
 				},
 				// userRemote login
 				function(cb){
+					console.warn('userRemote login');
 					self.app.rpc.user.userRemote.login(session, username, pwd, sid, cb);
 				}
 			],function(err){

@@ -73,6 +73,7 @@ window.onload = function() {
 
 
 			pomelo.on('addPlayer', function(p) {
+				if(p.name == $scope.username){return;}
 				$scope.playerList.push(p);
 				$scope.$apply();
 				console.warn('after addPlayer->', $scope.playerList);

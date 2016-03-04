@@ -5,6 +5,7 @@
   "dependencies": {
     "async": "^1.5.2",
     "eventproxy": "^0.3.4",
+    "jasmine": "^2.4.1",
     "pomelo": "1.2.2",
     "underscore": "^1.8.3"
   }
