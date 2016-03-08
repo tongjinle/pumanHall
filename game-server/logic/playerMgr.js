@@ -1,9 +1,10 @@
 var _ = require('underscore');
+var Dict = require('./dict');
 var Player = require('./player');
 
 var Handler = (function() {
 	var cls = function() {
-		this.playerList = [];
+		this.playerList = new Dict();
 	};
 
 	var staticHandler = cls;
@@ -32,12 +33,10 @@ var Handler = (function() {
 		var data = _.find(database, function(n) {
 			return n.username == username && n.pwd == pwd;
 		});
-		var p = self.find(username);
+		var p = new Player(username);
 		// mock
 		setTimeout(function() {
-			if (data && !p) {
-				p = new Player(username);
-				self.playerList.push(p);
+			if (data && self.playerList.add(p.name,p)) {
 				next(null, p);
 			} else {
 				next(true);
@@ -47,14 +46,9 @@ var Handler = (function() {
 
 	publicHandler.remove = function(username, next) {
 		var self = this;
-		var p = self.find(username);
-		console.warn('playerMgr.remove', {'wantToDel':username,'ins': p});
+		var p = self.playerList.remove(username);
 		setTimeout(function() {
 			if (p) {
-				self.playerList = _.filter(self.playerList, function(n) {
-					return n!=p;
-				});
-				console.warn('playerMgr.remove-2', self.playerList);
 				next(null, p);
 			} else {
 				next(true);
@@ -64,18 +58,12 @@ var Handler = (function() {
 
 	publicHandler.find = function(username) {
 		var self = this;
-		if (username === undefined) {
-			return self.playerList;
-		}
-		var p = _.find(self.playerList, function(n) {
-			return n.name == username;
-		});
-		return p;
+		return self.playerList.get(username);
 	};
 
 	publicHandler.update = function(username,changes,next){
 		var self = this;
-		var p = this.find(username);
+		var p = self.find(username);
 		if(p){
 			_.each(changes,function(v,k){
 				p[k]=v;
