@@ -1,9 +1,13 @@
+// 大厅是房间的"管理者"
 var _ = require('underscore');
+var Dict = require('./dict');
+var Room = require('./room');
+
 var Hall = (function(){
 	var cls = function(hallName,gameName,status) {
 		this.id = _.uniqueId();
-		this.roomIdList = [];
-		this.playerIdList = [];
+		this.roomList = new Dict();
+		this.playerList = new Dict();
 		this.status = status || 'open';
 		this.gameName = gameName;
 	};
@@ -12,52 +16,50 @@ var Hall = (function(){
 	var publicHandler = cls.prototype;
 	// static
 	// private
-	function find
 
 	// public
-	publicHandler.open = function(){
-		this.status = 'open';
+
+	// 修改hall的状态
+	// 只有open和close
+	publicHandler.changeStatus = function(status){
+		this.status = status;
 	};
 
-	publicHandler.close = function(){
-		this.status = 'close';
+	// 增加房间
+	publicHandler.addRoom = function(gameName){
+		var self = this;
+		var room = new Room(self.id,self.gameName);
+		room =  self.roomList.add(room.id,room);
+		// 触发
+		// room && room.afterAdd && room.afterAdd();
+		return room;
 	};
 
-	publicHandler.addRoom = function(roomId){
-		this.roomIdList.push(roomId);
-		this.roomIdList = _.uniq(this.roomIdList);
-	};
-
+	// 移除房间
 	publicHandler.removeRoom = function(roomId){
-		this.roomIdList = _.without(this.roomIdList,function(n){return n == roomId;});
+		var self = this;
+		var room = self.roomList.remove(roomId);		
+		// room && room.afterRemove && room.afterRemove();
+		return room;
 	};
 
 	// 增加一个玩家
-	publicHandler.addPlayer = function(pId){
-		if(!this.findPlayer(pId)){
-			this.playerIdList.push(pId);
-			return true;
-		}
-		return false;
+	publicHandler.addPlayer = function(player){
+		var self = this;
+		var p = self.playerList.add(player.name,player);
+		return p;
 	};
 
 	// 删除一个玩家
-	publicHandler.removePlayer = function(pId){
-		if(this.findPlayer(pId)){
-			this.playerIdList = _.without(this.playerIdList,function(n){ return n == pId;});
-			// 同时从各个房间中
-			_.each(this.roomIdList,function(){
-				
-			});
-			var p = playerMgr.getPlayer(pId);
-			p.quitRoom
-			return true;
-		}
-		return false;
+	publicHandler.removePlayer = function(username){
+		var self = this;
+		var p = self.playerList.remove(username);
+		return p;
 	};
 
-	publicHandler.findPlayer = function(pId){
-		return _.find(this.playerIdList,function(n){return pId == n;});
+	// 寻找玩家
+	publicHandler.findPlayer = function(username){
+		return self.playerList.get(username);
 	};
 
 	return cls;
