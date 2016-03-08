@@ -1,17 +1,13 @@
-/*
-	游戏房间
-*/
-
+// 房间
 var GameFactory = require('./gameFactory');
 var _ = require('underscore');
 
 var Room = (function(){
-	var cls = function(app,hallId,gameName) {
+	var cls = function(hallId,gameName) {
 		this.id = _.uniqueId();
 		this.status = CONF.ROOM_STATUS.OPEN;
 		this.hallId = hallId;
 		this.gameName = null;
-		this.channel = app.get('channelService').getChannel(this.id,true);		
 		this.playerList = [];
 		this.game = GameFactory.create(this.gameName);
 	};
@@ -24,24 +20,19 @@ var Room = (function(){
 	// private
 
 	// public
+	// 修改状态
 
-	// 发送信息到游戏逻辑
-	publicHandler.sendToGame = function(msg){
-		this.game.accpet(msg);
-	};
+	// 增加玩家
 
-	// 发送信息给客户端
+	// 删除玩家
+
+	// 玩家修改状态
+
+
+	// 发送信息到游戏逻辑,并且从游戏逻辑获取处理结果
 	publicHandler.send = function(msg){
-		if(msg.isBroadcast){
-			this.channel.push(msg);
-		}else{
-
-		}
+		return this.game.accpet(msg);
 	};
-
-	// 接收来自客户端的信息
-	publicHandler.accpet = function(msg,session)
-
 
 
 	return cls;
