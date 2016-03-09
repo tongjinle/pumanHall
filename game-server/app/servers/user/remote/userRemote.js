@@ -4,7 +4,7 @@ var PlayerMgr = require('../../../../logic/playerMgr');
 var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
-		this.playerMgr = PlayerMgr.create();
+		this.playerMgr = new PlayerMgr();
 		this.channel = this.app.get('channelService').createChannel('userCenter');
 	};
 

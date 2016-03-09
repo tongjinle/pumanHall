@@ -11,10 +11,6 @@ var Handler = (function() {
 	var publicHandler = cls.prototype;
 
 	// static
-	var _ins;
-	staticHandler.create = function() {
-		return _ins || (_ins = new cls());
-	};
 
 	// private
 	// mock database
