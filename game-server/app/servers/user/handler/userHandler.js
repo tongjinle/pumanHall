@@ -1,12 +1,10 @@
 var _ = require('underscore');
-var PlayerMgr = require('../../../../logic/playerMgr');
 // var userRemote = require('../remote/userRemote');
 
 
 var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
-		this.playerMgr = PlayerMgr.create();
 	};
 
 	var staticHandler = cls;
@@ -20,10 +18,6 @@ var Handler = (function(){
 	publicHandler.getPlayerList = function(msg,session,next){
 		var self = this;
 		self.app.rpc.user.userRemote.getPlayerList(session,next);
-		return;
-		
-		var playerList = self.playerMgr.find();
-		next(null,{playerList:playerList});
 		return;
 	};
 

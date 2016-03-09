@@ -1,0 +1,16 @@
+.loginStatus{
+	width:120px;
+	height: 40px;
+	line-height: 40px;
+	color:white;
+	float: right;
+	font-size: 28px;
+	text-align: center;
+}
+.login{
+	background-color: green;
+}
+.logout{
+	background-color: gray;
+}
+

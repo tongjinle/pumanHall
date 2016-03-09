@@ -33,7 +33,6 @@ var Handler = (function() {
 			var sid = data.sid;
 			var next = data.next;
 
-			var msg = {};
 			async.series([
 				// userRemote logout
 				function(cb){
@@ -42,7 +41,7 @@ var Handler = (function() {
 						cb();
 						return;
 					}
-					self.app.rpc.user.userRemote.logout(session, session.uid, session.sid, cb);
+					self.app.rpc.user.userRemote.logout(session, session.uid, session.get('sid'), cb);
 				},
 				// kick old uid
 				function(cb){
@@ -76,12 +75,12 @@ var Handler = (function() {
 					console.warn('userRemote login');
 					self.app.rpc.user.userRemote.login(session, username, pwd, sid, cb);
 				}
-			],function(err){
+			],function(err,data){
 				if(err){
 					next(err,{code:500});
 					return;
 				}
-				next(null,msg.login);
+				next(null,data[data.length-1]);
 			});
 
 			// // // 如果已经登陆,且现在用新的用户登陆,则优先退出老用户

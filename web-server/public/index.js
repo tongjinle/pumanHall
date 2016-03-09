@@ -16,7 +16,13 @@ window.onload = function() {
 				console.warn(data);
 				if(data.flag){
 					$scope.isLogin = true;
+					$scope.loginUsername = $scope.username;
+				}else{
+					$scope.isLogin = false;
+					$scope.loginUsername = null; 
+					
 				}
+				$scope.$apply();
 			});
 		};
 
@@ -27,6 +33,9 @@ window.onload = function() {
 			pomelo.request(route, msg, function(data) {
 				if(data.flag){
 					$scope.isLogin = false;
+					$scope.loginUsername = null;
+					$scope.$apply();
+
 				}
 			});
 		};

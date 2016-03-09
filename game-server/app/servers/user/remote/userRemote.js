@@ -22,10 +22,11 @@ var Handler = (function(){
 		self.playerMgr.add(username,pwd,function(err,p){
 			console.warn('>>>>>>login',err,p);
 			if(!err){
-				console.warn('>>> channel add : '+username+","+sid,self.channel.getMembers());
+				console.warn('>>> channel before login : '+username+","+sid,self.channel.getMembers());
 				self.channel.add(username,sid);
 				self.app.get('channelService').pushMessageByUids('getPlayerList',self.playerMgr.find(),[{uid:username,sid:sid}]);
 				self.channel.pushMessage('addPlayer',p);
+				console.warn('>>> channel after login : '+username+","+sid,self.channel.getMembers());
 			}
 			next(null,{
 				flag:!!p,
@@ -37,10 +38,14 @@ var Handler = (function(){
 	publicHandler.logout = function(username,sid,next){
 		var self = this;
 		self.playerMgr.remove(username,function(err,p){
+			console.warn('logout in remote');
+			console.warn(err,p);
 			// 此处err表示是否删除player成功
 			if(!err){
+				console.warn('>>> channel before logout : '+username+","+sid,self.channel.getMembers());
 				self.channel.pushMessage('removePlayer',p);
 				self.channel.leave(username,sid);
+				console.warn('>>> channel after logout : '+username+","+sid,self.channel.getMembers());
 			}
 			next(null,{
 				flag:!err,
