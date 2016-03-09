@@ -51,6 +51,12 @@ var Dict = (function(){
 		return null;
 	};
 
+	// 获取item的数量
+	publicHandler.count = function(){
+		var self = this;
+		return _.size(self._dict);
+	};
+
 	return cls;
 
 }).call(this);
