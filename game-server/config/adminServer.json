@@ -1,10 +1,14 @@
 [
 	{
-	    "type": "connector",
-	    "token": "agarxhqb98rpajloaxn34ga8xrunpagkjwlaw3ruxnpaagl29w4rxn"
+		"type": "connector",
+		"token": "agarxhqb98rpajloaxn34ga8xrunpagkjwlaw3ruxnpaagl29w4rxn"
 	},
 	{
 		"type":"user",
-	    "token": "bgarxhqb98rpajloaxn34ga8xrunpagkjwlaw3ruxnpaagl29w4rxn"
+		"token": "bgarxhqb98rpajloaxn34ga8xrunpagkjwlaw3ruxnpaagl29w4rxn"
+	},
+	{
+		"type":"hall",
+		"token": "cgarxhqb98rpajloaxn34ga8xrunpagkjwlaw3ruxnpaagl29w4rxn"
 	}
 ]
