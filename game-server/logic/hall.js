@@ -6,6 +6,7 @@ var Room = require('./room');
 var Hall = (function(){
 	var cls = function(hallName,gameName,status) {
 		this.id = _.uniqueId();
+		this.name = hallName;
 		this.roomList = new Dict();
 		this.playerList = new Dict();
 		this.status = status || 'open';

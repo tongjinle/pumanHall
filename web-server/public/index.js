@@ -23,6 +23,7 @@ window.onload = function() {
 					
 				}
 				$scope.$apply();
+				$scope.getHallList();
 			});
 		};
 
@@ -60,7 +61,19 @@ window.onload = function() {
 			pomelo.request(route, msg, function(data) {
 				console.warn('getPlayerList:', data);
 			});
-		}
+		};
+
+
+		// getHallList
+		$scope.getHallList = function(){
+			var route = 'hall.hallHandler.getHallList';
+			var msg = {};
+			pomelo.request(route,msg,function(data){
+				console.warn('getHallList',data);
+				$scope.hallList = data;
+				$scope.$apply();
+			});
+		};
 
 
 		// 初始化pomelo

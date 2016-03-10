@@ -8,7 +8,8 @@ var HallMgr = require('../../../../logic/hallMgr');
 var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
-		this.hallMgr = new hallMgr();	
+		this.hallMgr = new HallMgr();
+		this._createHalls();	
 		this.channelService = this.app.get('channelService');
 	};
 
@@ -26,14 +27,29 @@ var Handler = (function(){
 
 	};
 
+	// 创建hall
+	publicHandler._createHalls = function(cfg){
+		var self = this;
+		cfg = [
+			{hallName:'beijing',gameName:'poker'},
+			{hallName:'shanghai',gameName:'poker'},
+			{hallName:'huzhou',gameName:'go'},
+		];
+		_.each(cfg,function(n){
+			self.hallMgr.addHall(n.hallName,n.gameName,'open');
+		});
+	};
+
 	// 获取玩家列表
 	publicHandler._getHallPlayerList = function(){
 		var self = this;
-		var list = self.hallMgr.get();
+		var list = self.hallMgr.find();
 		return _.map(list,function(n){
 			return {
 				// 大厅编号
 				id:n.id,
+				// 大厅名称
+				name:n.name,
 				// 大厅游戏
 				gameName:n.gameName,
 				// 大厅人数
@@ -100,6 +116,7 @@ var Handler = (function(){
 
 	// 获取大厅列表(包括一些附加信息,包括大厅人数,大厅的状态)
 	publicHandler.getHallList = function(next){
+		console.log('getHallList>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
 		var self = this;
 		var hallList = self._getHallPlayerList();
 		next(null,hallList);
@@ -111,3 +128,9 @@ var Handler = (function(){
 	return cls;
 
 }).call(this);
+
+
+
+module.exports = function(app) {
+	return new Handler(app);
+};
