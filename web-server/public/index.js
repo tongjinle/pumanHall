@@ -15,14 +15,13 @@ window.onload = function() {
 			pomelo.request(route, msg, function(data){
 				console.warn(data);
 				if(data.flag){
-					$scope.isLogin = true;
-					$scope.loginUsername = $scope.username;
+					$scope.player = data.player;
 				}else{
-					$scope.isLogin = false;
-					$scope.loginUsername = null; 
+					$scope.player = null;
 					
 				}
 				$scope.$apply();
+				$scope.getPlayerList();
 				$scope.getHallList();
 			});
 		};
@@ -33,8 +32,7 @@ window.onload = function() {
 			var msg = {};
 			pomelo.request(route, msg, function(data) {
 				if(data.flag){
-					$scope.isLogin = false;
-					$scope.loginUsername = null;
+					$scope.player = null;
 					$scope.$apply();
 
 				}
@@ -42,7 +40,9 @@ window.onload = function() {
 		};
 
 		// update
+		// todo 
 		$scope.update = function() {
+			return;
 			var route = 'user.userHandler.update';
 			var msg = {
 				changes: {
@@ -54,12 +54,14 @@ window.onload = function() {
 			});
 		};
 
-		// listAll
-		$scope.listAll = function () {
+		// getPlayerList
+		$scope.getPlayerList = function () {
 			var route = 'user.userHandler.getPlayerList';
 			var msg = {};
 			pomelo.request(route, msg, function(data) {
 				console.warn('getPlayerList:', data);
+				$scope.playerList = data;
+				$scope.$apply();
 			});
 		};
 
@@ -75,6 +77,18 @@ window.onload = function() {
 			});
 		};
 
+		// 进入大厅
+		$scope.enterHall = function(hallName){
+			var route = 'hall.hallHandler.enterHall';
+			var msg = {
+				player:$scope.player,
+				hallName:hallName
+			};
+			pomelo.request(route,msg,function(data){
+				console.log('after enterHall',data);
+			});
+		}
+
 
 		// 初始化pomelo
 		function init(next) {
@@ -87,26 +101,48 @@ window.onload = function() {
 		init(function(){
 			// push message
 
-			pomelo.on('getPlayerList', function(pList) {
-				$scope.playerList=pList;
+			pomelo.on('getPlayerList', function(playerList) {
+				$scope.playerList=playerList;
 				$scope.$apply();
 				console.warn('after getPlayerList->', $scope.playerList);
 			});
 
 
-			pomelo.on('addPlayer', function(p) {
-				if(p.name == $scope.username){return;}
-				$scope.playerList.push(p);
+			pomelo.on('addPlayer', function(player) {
+				if($scope.player && player.name == $scope.player.name){return;}
+				$scope.playerList.push(player);
 				$scope.$apply();
 				console.warn('after addPlayer->', $scope.playerList);
 			});
 
-			pomelo.on('removePlayer', function(p) {
+			pomelo.on('removePlayer', function(player) {
 				$scope.playerList = _.filter($scope.playerList, function(n) {
-					return n.name != p.name;
+					return n.name != player.name;
 				});
 				$scope.$apply();
 				console.warn('after removePlayer->', $scope.playerList);
+			});
+
+			pomelo.on('hall.getPlayerList',function (playerList) {
+				$scope.hallPlayerList = playerList;
+				$scope.$apply();
+				console.warn('after hall getPlayerList->', $scope.playerList);
+
+			});
+
+			pomelo.on('hall.addPlayer',function (player) {
+				if(player.name == $scope.loginUsername){return;}
+				$scope.hallPlayerList.push(player);
+				$scope.$apply();
+				console.warn('after hall addPlayer->', $scope.playerList);
+			});
+
+			pomelo.on('hall.removePlayer',function(player){
+				$scope.hallPlayerList = _.filter($scope.hallPlayerList, function(n) {
+					return n.name != player.name;
+				});
+				$scope.$apply();
+				console.warn('after removePlayer->', $scope.hallPlayerList);
 			});
 		});
 	}]);

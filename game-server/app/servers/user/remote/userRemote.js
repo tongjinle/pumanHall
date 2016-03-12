@@ -23,14 +23,14 @@ var Handler = (function(){
 			console.warn('>>>>>>login',err,p);
 			if(!err){
 				console.warn('>>> channel before login : '+username+","+sid,self.channel.getMembers());
-				self.channel.add(username,sid);
-				self.app.get('channelService').pushMessageByUids('getPlayerList',self.playerMgr.find(),[{uid:username,sid:sid}]);
 				self.channel.pushMessage('addPlayer',p);
+				self.channel.add(username,sid);
+				// self.app.get('channelService').pushMessageByUids('getPlayerList',self.playerMgr.find(),[{uid:username,sid:sid}]);
 				console.warn('>>> channel after login : '+username+","+sid,self.channel.getMembers());
 			}
 			next(null,{
 				flag:!!p,
-				username:username
+				player:p
 			});
 		});
 	};

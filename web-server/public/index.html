@@ -28,7 +28,7 @@
 					<div class="img"></div>
 				</div>
 			</div>
-			<div class="loginStatus" ng-class="{'login':isLogin,'logout':!isLogin}">{{isLogin?loginUsername:'未登录'}}</div>
+			<div class="loginStatus" ng-class="{'login':player,'logout':!player}">{{player?player.name:'未登录'}}</div>
 			<div class="g-background">
 				<div class="g-content">
 					<table >
@@ -78,17 +78,17 @@
 				<input type="button" value="login" ng-click="login()"/>
 				<input type="button" value="logout" ng-click="logout()"/>
 				<input type="button" value="update" ng-click="update()"/>
-				<input type="button" value="listAll" ng-click="listAll()"/>
+				<input type="button" value="getPlayerList" ng-click="getPlayerList()"/>
 			</div>
 			<div class="g-button">
-			<input type="button" value="enterHall" onclick="enterHall()"/>
-			<input type="button" value="quitHall" onclick="quitHall()"/>
-			<input type="button" value="enterRoom1" onclick="enterRoom(1)"/>
-			<input type="button" value="enterRoom2" onclick="enterRoom(2)"/>
-			<input type="button" value="quitRoom" onclick="quitRoom()"/>
+			<input type="button" value="enterHall" ng-click="enterHall()"/>
+			<input type="button" value="quitHall" ng-click="quitHall()"/>
+			<input type="button" value="enterRoom1" ng-click="enterRoom(1)"/>
+			<input type="button" value="enterRoom2" ng-click="enterRoom(2)"/>
+			<input type="button" value="quitRoom" ng-click="quitRoom()"/>
 			</div>
 			<div class="g-button">
-				<input type="button" value="beReady" onclick="beReady()"/>
+				<input type="button" value="beReady" ng-click="beReady()"/>
 			</div>
 		</div>
 	</body>
