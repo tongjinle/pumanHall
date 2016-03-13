@@ -123,27 +123,27 @@ window.onload = function() {
 				console.warn('after removePlayer->', $scope.playerList);
 			});
 
-			pomelo.on('hall.getPlayerList',function (playerList) {
-				$scope.hallPlayerList = playerList;
+			pomelo.on('hall.getList',function (playerList) {
+				$scope.hallList = playerList;
 				$scope.$apply();
-				console.warn('after hall getPlayerList->', $scope.playerList);
+				console.warn('after hall getPlayerList->', $scope.hallList);
 
 			});
 
-			pomelo.on('hall.addPlayer',function (player) {
-				if(player.name == $scope.loginUsername){return;}
-				$scope.hallPlayerList.push(player);
-				$scope.$apply();
-				console.warn('after hall addPlayer->', $scope.playerList);
-			});
+			// pomelo.on('hall.addPlayer',function (player) {
+			// 	if(player.name == $scope.loginUsername){return;}
+			// 	$scope.hallPlayerList.push(player);
+			// 	$scope.$apply();
+			// 	console.warn('after hall addPlayer->', player);
+			// });
 
-			pomelo.on('hall.removePlayer',function(player){
-				$scope.hallPlayerList = _.filter($scope.hallPlayerList, function(n) {
-					return n.name != player.name;
-				});
-				$scope.$apply();
-				console.warn('after removePlayer->', $scope.hallPlayerList);
-			});
+			// pomelo.on('hall.removePlayer',function(player){
+			// 	$scope.hallPlayerList = _.filter($scope.hallPlayerList, function(n) {
+			// 		return n.name != player.name;
+			// 	});
+			// 	$scope.$apply();
+			// 	console.warn('after removePlayer->', player);
+			// });
 		});
 	}]);
 

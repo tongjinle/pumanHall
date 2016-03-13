@@ -41,7 +41,7 @@ var Handler = (function(){
 	};
 
 	// 获取玩家列表
-	publicHandler._getHallPlayerList = function(){
+	publicHandler._getHallList = function(){
 		var self = this;
 		var list = self.hallMgr.find();
 		return _.map(list,function(n){
@@ -69,7 +69,7 @@ var Handler = (function(){
 	// 获取玩家所在的hall
 	publicHandler._getHall = function(username){
 		var self = this;
-		return _.find(self.hallMgr.get(),function(hall){
+		return _.find(self.hallMgr.find(),function(hall){
 			return hall.playerList.get(username);
 		});
 	};
@@ -78,14 +78,16 @@ var Handler = (function(){
 	// 进入大厅
 	publicHandler.enterHall = function(player,hallName,sid,next){
 		var self = this;
-		var hall = self.hallMgr.get(hallName);
+		var hall = self.hallMgr.find(hallName);
 		if(hall){
 			var p = hall.playerList.add(player.name,player);
 			if(p){
 				var channel = self._getChannelByHall(hall);
 				channel.add(player.name,sid);
-				self.channelService.pushMessageByUids('hall.getPlayerList',self._getHallPlayerList(),[{uid:player.name,sid:sid}]);
-				channel.push('hall.addPlayer',p);
+				// self.channelService.pushMessageByUids('hall.getPlayerList',self._getHallList(),[{uid:player.name,sid:sid}]);
+				channel.pushMessage('hall.getList',self._getHallList());
+				console.warn('players in hall-------->>',self._getHallList());
+				// channel.pushMessage('hall.addPlayer',p);
 				next(null);
 			}else{
 				next(true,{code:errorCodeDict.PLAYER_NOT_EXIST});
@@ -104,7 +106,8 @@ var Handler = (function(){
 			var p = self.playerList.remove(username);
 			if(p){
 				var channel = self.channelService.getChannel(hall);
-				channel.push('hall.removePlayer',p);
+				// channel.push('hall.removePlayer',p);
+				channel.pushMessage('hall.getList',self._getHallList());
 				next(null);
 			}else{
 				next(true,errorCodeDict.PLAYER_NOT_EXIST);
@@ -118,7 +121,7 @@ var Handler = (function(){
 	publicHandler.getHallList = function(next){
 		console.log('getHallList>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
 		var self = this;
-		var hallList = self._getHallPlayerList();
+		var hallList = self._getHallList();
 		next(null,hallList);
 	};
 

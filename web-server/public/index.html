@@ -61,7 +61,7 @@
 							<tr ng-repeat="h in hallList">
 								<td>{{[h.name, h.gameName].join('-')}}</td>
 								<td>{{h.status}}</td>
-								<td>{{h.count}}</td>
+								<td>{{h.playerCount}}</td>
 								<td ng-class="{'inHall':myHallName==h.name,'outHall':myHallName!=h.name}" ng-click="enterHall(h.name)">{{myHallName==h.name?'当前大厅':'进入大厅'}}</td>
 							</tr>
 						</tbody>
