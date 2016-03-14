@@ -30,7 +30,7 @@ var Handler = (function(){
 	publicHandler.update = function(msg,session,next){
 		var self = this;
 		var username = session.uid;
-		var changes = msg.changes;
+		var changes = msg;
 		self.app.rpc.user.userRemote.update(session,username,changes,next);
 
 	};

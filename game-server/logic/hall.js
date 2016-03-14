@@ -60,6 +60,7 @@ var Hall = (function(){
 
 	// 寻找玩家
 	publicHandler.findPlayer = function(username){
+		var self = this;
 		return self.playerList.get(username);
 	};
 

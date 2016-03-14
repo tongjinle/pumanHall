@@ -45,9 +45,7 @@ window.onload = function() {
 			return;
 			var route = 'user.userHandler.update';
 			var msg = {
-				changes: {
-					gameStatus: 2
-				}
+				gameStatus: 2
 			};
 			pomelo.request(route, msg, function(data) {
 				console.warn(data);
@@ -121,6 +119,14 @@ window.onload = function() {
 				});
 				$scope.$apply();
 				console.warn('after removePlayer->', $scope.playerList);
+			});
+
+			pomelo.on('updatePlayer',function(player){
+				var index = _.findIndex($scope.playerList,function(p){return p.name == player.name});
+				$scope.playerList[index] = player;
+				$scope.$apply();
+				console.warn(player);
+
 			});
 
 			pomelo.on('hall.getList',function (playerList) {

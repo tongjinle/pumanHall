@@ -70,51 +70,111 @@ var Handler = (function(){
 	publicHandler._getHall = function(username){
 		var self = this;
 		return _.find(self.hallMgr.find(),function(hall){
-			return hall.playerList.get(username);
+			return hall.findPlayer(username);
 		});
 	};
+
+	// 找到玩家信息
+	publicHandler._getPlayer = function(username){
+		var self = this;
+		var p=null;
+		_.find(self.hallMgr.find(),function(hall){
+			p = hall.findPlayer(username);
+			return true;
+		});
+		return p;
+	};
+
 
 	// public
 	// 进入大厅
 	publicHandler.enterHall = function(player,hallName,sid,next){
 		var self = this;
-		var hall = self.hallMgr.find(hallName);
-		if(hall){
-			var p = hall.playerList.add(player.name,player);
-			if(p){
-				var channel = self._getChannelByHall(hall);
-				channel.add(player.name,sid);
-				// self.channelService.pushMessageByUids('hall.getPlayerList',self._getHallList(),[{uid:player.name,sid:sid}]);
-				channel.pushMessage('hall.getList',self._getHallList());
-				console.warn('players in hall-------->>',self._getHallList());
-				// channel.pushMessage('hall.addPlayer',p);
-				next(null);
-			}else{
-				next(true,{code:errorCodeDict.PLAYER_NOT_EXIST});
+		async.series({
+			// 退出大厅(可能用户已经在别的大厅)
+			'quitHall':function(cb){
+				self.quitHall(player.name,sid,function(){
+					cb();
+				});
+			},
+			// 进入大厅
+			'enterHall':function(cb){
+				var hall = self.hallMgr.find(hallName);
+				if(hall){
+					var p = hall.playerList.add(player.name,player);
+					if(p){
+						var channel = self._getChannelByHall(hall);
+						channel.add(player.name,sid);
+						// self.channelService.pushMessageByUids('hall.getPlayerList',self._getHallList(),[{uid:player.name,sid:sid}]);
+						channel.pushMessage('hall.getList',self._getHallList());
+						console.warn('players in hall-------->>',self._getHallList());
+						// channel.pushMessage('hall.addPlayer',p);
+						cb(null);
+					}else{
+						cb(true,{code:errorCodeDict.PLAYER_NOT_EXIST});
+					}
+				}else{
+					console.error('no such hall:'+hallName)
+					cb(true,{code:errorCodeDict.HALL_NOT_EXIST});
+				}
+			},
+			// 更新user中心的状态
+			// todo
+			'updateUser':function(cb){
+				var hall = self.hallMgr.find(hallName);
+				var changes = {
+					hallId:hall.id,
+					hallName:hall.name,
+					gameName:hall.gameName
+				};
+				self.app.rpc.user.userRemote.update(null,player.name,changes,cb);
+				// cb();
 			}
-		}else{
-			console.error('no such hall:'+hallName)
-			next(true,{code:errorCodeDict.HALL_NOT_EXIST});
-		}
+		},function(err,data){
+			next(err,data['enterHall']);
+		});
 	};
 
 	// 退出大厅
 	publicHandler.quitHall = function(username,sid,next){
 		var self = this;
-		var hall = self.getHall(username);
-		if(hall){
-			var p = self.playerList.remove(username);
-			if(p){
-				var channel = self.channelService.getChannel(hall);
-				// channel.push('hall.removePlayer',p);
-				channel.pushMessage('hall.getList',self._getHallList());
-				next(null);
-			}else{
-				next(true,errorCodeDict.PLAYER_NOT_EXIST);
+		async.series({
+			// 退出房间
+			// todo
+			'quitRoom':function(cb){
+				cb();
+			},
+			// 退出大厅
+			'quitHall':function(cb){
+				var hall = self._getHall(username);
+				if(hall){
+					var p = hall.playerList.remove(username);
+					if(p){
+						var channel = self._getChannelByHall(hall);
+						// channel.push('hall.removePlayer',p);
+						channel.pushMessage('hall.getList',self._getHallList());
+						cb(null,p);
+					}else{
+						cb(true,errorCodeDict.PLAYER_NOT_EXIST);
+					}
+				}else{
+					cb(true,errorCodeDict.HALL_NOT_EXIST);
+				}
+			},
+			// 更新用户中心
+			'updateUser':function(cb){
+				var player = self._getPlayer(username);
+				var changes = {
+					hallId:-1,
+					hallName:null,
+					gameName:null
+				};
+				self.app.rpc.user.userRemote.update(null,username,changes,cb);
 			}
-		}else{
-			next(true,errorCodeDict.HALL_NOT_EXIST);
-		}
+		},function(err,data){
+			next(err,data['quitHall']);
+		});
+		
 	};
 
 	// 获取大厅列表(包括一些附加信息,包括大厅人数,大厅的状态)
