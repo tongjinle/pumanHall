@@ -4,3 +4,5 @@ game-server/
 web-server/node_modules/
 web-server/public/bower_components/
 web-server/public/css/bundle.css
+node_modules/
+out/
