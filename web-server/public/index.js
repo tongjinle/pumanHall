@@ -5,8 +5,21 @@ window.onload = function() {
 		$scope.username = 'dino';
 		$scope.pwd='test123';
 		$scope.playerList = [];
+
+
 		// login
 		$scope.login = function(){
+			if($scope.username==''){
+				alert('username can not be empty!!');
+			}
+			var route = 'gate.gateHandler.queryEntry';
+			var msg = {
+				uid:$scope.username
+			};
+			pomelo.request(route,msg,function(data){
+				console.log(data);
+			});
+			return;
 			var route = 'connector.entryHandler.entry';
 			var msg = {
 				username: $scope.username,
@@ -92,7 +105,7 @@ window.onload = function() {
 		function init(next) {
 			var pomelo = window.pomelo;
 			var host = "127.0.0.1";
-			var port = "3010";
+			var port = "4010";
 			pomelo.init({host: host, port: port, log: true }, next);
 		}
 
@@ -129,11 +142,21 @@ window.onload = function() {
 
 			});
 
-			pomelo.on('hall.getList',function (playerList) {
-				$scope.hallList = playerList;
+			pomelo.on('hall.getList',function (hallList) {
+				$scope.hallList = hallList;
 				$scope.$apply();
 				console.warn('after hall getPlayerList->', $scope.hallList);
 
+				// 确定我所在的大厅
+				// var myHall = _.find($scope.hallList,function(hall){});
+				// $scope.myHallName = 
+
+
+			});
+
+
+			pomelo.on('abc',function(abc){
+				console.log(abc);
 			});
 
 			// pomelo.on('hall.addPlayer',function (player) {

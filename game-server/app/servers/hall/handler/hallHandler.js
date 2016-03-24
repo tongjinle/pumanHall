@@ -1,48 +1,48 @@
-var _ = require('underscore');
+// var _ = require('underscore');
 
-var Handler = (function() {
-	var cls = function(app) {
-		this.app = app;
-	};
+// var Handler = (function() {
+// 	var cls = function(app) {
+// 		this.app = app;
+// 	};
 
-	var staticHandler = cls;
-	var publicHandler = cls.prototype;
+// 	var staticHandler = cls;
+// 	var publicHandler = cls.prototype;
 
-	// static
+// 	// static
 
-	// private
+// 	// private
 
-	// public
-	// 进入大厅
-	publicHandler.enterHall = function(msg, session, next) {
-		var self = this;
-		var player = msg.player;
-		var hallName = msg.hallName;
-		var sid = session.get('sid');
+// 	// public
+// 	// 进入大厅
+// 	publicHandler.enterHall = function(msg, session, next) {
+// 		var self = this;
+// 		var player = msg.player;
+// 		var hallName = msg.hallName;
+// 		var sid = session.get('sid');
 
-		self.app.rpc.hall.hallRemote.enterHall(session,player,hallName,sid,next);
-	};
+// 		self.app.rpc.hall.hallRemote.enterHall(session,player,hallName,sid,next);
+// 	};
 
-	// 退出大厅
-	publicHandler.quitHall = function(msg,session,next){
-		var self = this;
-		var username = session.uid;
-		var sid = session.get('sid');
+// 	// 退出大厅
+// 	publicHandler.quitHall = function(msg,session,next){
+// 		var self = this;
+// 		var username = session.uid;
+// 		var sid = session.get('sid');
 
-		self.app.rpc.hall.hallRemote.quitHall(session,username,sid,next);
-	};
+// 		self.app.rpc.hall.hallRemote.quitHall(session,username,sid,next);
+// 	};
 
-	// 获取大厅列表
-	publicHandler.getHallList = function(msg,session,next){
-		var self = this;
-		self.app.rpc.hall.hallRemote.getHallList(session,next);
-	};
+// 	// 获取大厅列表
+// 	publicHandler.getHallList = function(msg,session,next){
+// 		var self = this;
+// 		self.app.rpc.hall.hallRemote.getHallList(session,next);
+// 	};
 
 
-	return cls;
+// 	return cls;
 
-}).call(this);
+// }).call(this);
 
-module.exports = function(app) {
-	return new Handler(app);
-};
+// module.exports = function(app) {
+// 	return new Handler(app);
+// };

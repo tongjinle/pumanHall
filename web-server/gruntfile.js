@@ -18,6 +18,7 @@ module.exports = function (grunt) {
 					'public/**/*.html',
 					'public/css/bundle.css',
 					'public/js/**/*.js', 
+					'public/index.js', 
 				]  
 			},
 			less:{
