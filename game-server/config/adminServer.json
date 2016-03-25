@@ -8,11 +8,15 @@
 		"token": "agarxhqb98rpajloaxn34ga8xrunpagkjwlaw3ruxnpaagl29w4rxn"
 	},
 	{
-		"type":"user",
+		"type":"platform",
 		"token": "bgarxhqb98rpajloaxn34ga8xrunpagkjwlaw3ruxnpaagl29w4rxn"
 	},
 	{
 		"type":"hall",
 		"token": "cgarxhqb98rpajloaxn34ga8xrunpagkjwlaw3ruxnpaagl29w4rxn"
+	},
+	{
+		"type":"message",
+		"token": "dgarxhqb98rpajloaxn34ga8xrunpagkjwlaw3ruxnpaagl29w4rxn"
 	}
 ]

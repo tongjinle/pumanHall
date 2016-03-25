@@ -1,3 +1,78 @@
+var async = require('async');
+var _ = require('underscore');
+
+
+var Handler = (function(){
+	var cls = function(app) {
+		this.app = app;
+	};
+
+	var staticHandler = cls;
+	var publicHandler = cls.prototype;
+
+	// static
+
+	// private
+
+	// public
+	publicHandler.login = function(msg,session,next){
+		var self = this;
+		var uid = msg.uid;
+		var pwd = msg.pwd;
+		var sid = self.app.get('serverId');
+
+		session.on('closed',function(session){
+			self.logout(msg,session,next);
+		});
+
+		async.series(
+		[
+			// logout
+			function(cb){
+				self.logout(msg,session,cb);
+			},
+			// session
+			function(cb){
+				session.bind(uid);
+				session.set('sid',sid);
+				session.pushAll(cb);
+			},
+			// login
+			function(cb){
+				console.warn(self.app.rpc);
+				console.warn(self === self);
+				self.app.rpc.platform.platformRemote.addUser(session,uid,pwd,sid,cb);
+			}
+		],
+		(err,data)=> {
+			next(null,{
+				code:200
+			});
+		}
+		);
+	};
+
+
+	publicHandler.logout = function(msg,session,next){
+		var self = this;
+		if(session.uid){
+			session.unbind(session.uid);
+			self.app.rpc.platform.platformRemote.removeUser(session,uid,next);
+			return;
+		}
+		next();
+	};
+
+	return cls;
+
+}).call(this);
+
+
+
+module.exports = function(app) {
+	return new Handler(app);
+};
+
 // var async = require('async');
 // var EventProxy = require('eventproxy');
 // var _ = require('underscore');
@@ -145,17 +220,3 @@
 // 	return new Handler(app);
 // };
 
-'use strict'
-
-class Connector{
-	constructor(app){
-		this.app = app;
-	}
-
-
-}
-
-
-module.exports = function(app) {
-	return new Connector(app);
-};

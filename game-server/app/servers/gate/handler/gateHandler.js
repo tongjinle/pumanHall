@@ -1,12 +1,19 @@
-'use strict'
-
 var dispatch = require('../../../util/dispatcher').dispatch;
-class Gate{
-	constructor(app){
-		this.app = app;
-	}
 
-	queryEntry(msg,session,next){
+var Handler = (function(){
+	var cls = function(app) {
+		this.app = app;
+	};
+
+	var staticHandler = cls;
+	var publicHandler = cls.prototype;
+
+	// static
+
+	// private
+
+	// public
+	publicHandler.queryEntry = function(msg,session,next){
 		var uid = msg.uid;
 		if(!uid) {
 			next(null, {
@@ -22,16 +29,19 @@ class Gate{
 			});
 			return;
 		}
-		// here we just start `ONE` connector server, so we return the connectors[0] 
 		var res = dispatch(uid,connectors);
 		next(null, {
 			code: 200,
 			host: res.host,
 			port: res.clientPort
 		});
-	}
-}
+	};
+
+	return cls;
+
+}).call(this);
+
 
 module.exports = function(app){
-	return  new Gate(app);
+	return  new Handler(app);
 };

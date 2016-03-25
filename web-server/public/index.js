@@ -2,40 +2,69 @@ window.onload = function() {
 	var app = angular.module('hall',[]);
 
 	app.controller('hallCtrl', ['$scope', function($scope) {
+
+		// 是否连接上了connector服务器
+		$scope.isConnected = false;
+
 		$scope.username = 'dino';
 		$scope.pwd='test123';
 		$scope.playerList = [];
 
+		var gateConf = {
+			host:'127.0.0.1',
+			port:'3010'
+		};
+
+		$scope.listen = function(){
+			$scope.$on('gate.afterQuery',function(e,args){
+				var connectorHost = args.host;
+				var connectorPort = args.port;
+
+				pomelo.init({host:connectorHost,port:connectorPort,log:true},function(){
+					$scope.$emit('connector.afterInit');
+				});
+			});
+
+
+			$scope.$on('connector.afterInit',function(){
+				$scope.isConnected = true;
+				$scope.$apply();
+			})
+		};
+
+		$scope.queryGate = function(){
+			pomelo.init({host: gateConf.host, port: gateConf.port, log: true }, function(data){
+				var route = 'gate.gateHandler.queryEntry';
+				var msg = {uid:$scope.username};
+
+				pomelo.request(route,msg,function(data){
+					console.log(data);
+					if(data.code == 200){
+						$scope.$emit('gate.afterQuery',data);
+						// pomelo.disconnect();
+					}
+				});
+			});
+		};
 
 		// login
 		$scope.login = function(){
-			if($scope.username==''){
-				alert('username can not be empty!!');
-			}
-			var route = 'gate.gateHandler.queryEntry';
+			var route = 'connector.entryHandler.login';
 			var msg = {
-				uid:$scope.username
-			};
-			pomelo.request(route,msg,function(data){
-				console.log(data);
-			});
-			return;
-			var route = 'connector.entryHandler.entry';
-			var msg = {
-				username: $scope.username,
+				uid: $scope.username,
 				pwd: $scope.pwd
 			};
 			pomelo.request(route, msg, function(data){
 				console.warn(data);
-				if(data.flag){
-					$scope.player = data.player;
+				if(data.code == 200){
+					$scope.player = {name:$scope.username};
 				}else{
 					$scope.player = null;
 					
 				}
 				$scope.$apply();
-				$scope.getPlayerList();
-				$scope.getHallList();
+				// $scope.getPlayerList();
+				// $scope.getHallList();
 			});
 		};
 
@@ -103,9 +132,10 @@ window.onload = function() {
 
 		// 初始化pomelo
 		function init(next) {
+			return ;
 			var pomelo = window.pomelo;
 			var host = "127.0.0.1";
-			var port = "4010";
+			var port = "3010";
 			pomelo.init({host: host, port: port, log: true }, next);
 		}
 
@@ -159,6 +189,8 @@ window.onload = function() {
 				console.log(abc);
 			});
 
+
+
 			// pomelo.on('hall.addPlayer',function (player) {
 			// 	if(player.name == $scope.loginUsername){return;}
 			// 	$scope.hallPlayerList.push(player);
@@ -174,6 +206,11 @@ window.onload = function() {
 			// 	console.warn('after removePlayer->', player);
 			// });
 		});
+
+
+		$scope.listen();
+
+		$scope.queryGate();
 	}]);
 
 	angular.bootstrap(document.body,[app.name]);
