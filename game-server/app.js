@@ -1,4 +1,5 @@
 var pomelo = require('pomelo');
+var PlatformService = require("./app/service/platformService");
 
 /**
  * Init app for client.
@@ -23,6 +24,10 @@ app.configure('production|development', 'gate', function(){
 			connector : pomelo.connectors.hybridconnector,
 			useProtobuf : true
 		});
+});
+
+app.configure('production|development', 'platform', function(){
+	app.set('platformService',new PlatformService());
 });
 
 // start app
