@@ -55,8 +55,9 @@ var Handler = (function(){
 
 	publicHandler.logout = function(msg,session,next){
 		var self = this;
-		if(session.uid){
-			session.unbind(session.uid);
+		var uid = session.uid;
+		if(uid){
+			session.unbind(uid);
 			self.app.rpc.platform.platformRemote.removeUser(session,uid,next);
 			return;
 		}

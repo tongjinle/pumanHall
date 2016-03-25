@@ -2,6 +2,8 @@ var Handler = (function(){
 	var cls = function(app) {
 		this.app=app;
 		this.platformService = this.app.get('platformService');
+
+		this._channelName = 'CHANNEL_PLATFORM';
 	};
 
 	var staticHandler = cls;
@@ -14,8 +16,15 @@ var Handler = (function(){
 	// public
 	publicHandler.addUser = function(uid,pwd,sid,next){
 		var self = this;
+		async.series([],function(err,data){})
 		self.platformService.addUser(uid);
+		self.app.rpc.message.messageRemote.addUser(channelName,uid,sid,)
 		next();
+	};
+
+
+	publicHandler.removeUser = function(uid,next){
+		var self = this;
 	};
 
 	return cls;
