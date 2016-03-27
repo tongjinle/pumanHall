@@ -16,10 +16,19 @@ var Handler = (function(){
 	// public
 	publicHandler.addUser = function(uid,pwd,sid,next){
 		var self = this;
-		async.series([],function(err,data){})
-		self.platformService.addUser(uid);
-		self.app.rpc.message.messageRemote.addUser(channelName,uid,sid,)
-		next();
+		async.series([
+			function(cb){
+				self.platformService.addUser(uid);
+				cb();
+			},
+			function(cb){
+				self.app.rpc.message.messageRemote.addUser(channelName,uid,sid,cb);
+			}
+		],
+		function(err,data){
+			next();
+		}
+		);
 	};
 
 

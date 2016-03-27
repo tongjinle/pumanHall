@@ -51,7 +51,23 @@ var Handler = (function(){
 		next();
 	};
 
-	publicHandler.send = function(){};
+	// send message
+	// basic 
+	// channelName -> channelName OR uids
+	publicHandler.send = function(route,msg,channelName,next){
+		var self = this;
+
+		// when uids
+		if(_.isArray(channelName)){
+			var group = _.map(channelName,function(n){
+				return {uid:n,sid:self.getSidByUid(n)};
+			});
+			self.channelService.pushMessageByUids(route,msg,group,next);
+		}else{
+			var channel = self.channelService.getChannel(channelName);
+			channel.pushMessage(route,msg,next);
+		}
+	};
 
 	// channelMap
 	// get && set

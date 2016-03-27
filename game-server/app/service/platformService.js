@@ -14,11 +14,12 @@ var Handler = (function(){
 	// private
 
 	// public
-	publicHandler.addUser = function(uid){
+	publicHandler.addUser = function(uid,sid){
 		var self = this;
 		self.list.push(uid);
 		
 		// self.app.rpc.
+		self.app.rpc.message.messageRemote.addUser('platformChannel',uid,sid,)
 
 		console.log(self.list);
 
