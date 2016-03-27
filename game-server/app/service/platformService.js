@@ -2,6 +2,8 @@ var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
 		this.list = [];
+
+		console.log('platformService');
 	};
 
 	var staticHandler = cls;
@@ -15,8 +17,17 @@ var Handler = (function(){
 	publicHandler.addUser = function(uid){
 		var self = this;
 		self.list.push(uid);
+		
+		// self.app.rpc.
+
 		console.log(self.list);
+
+
 	};
+
+	publicHandler.removeUser = function(){
+		var self = this;
+	}; 
 
 
 	return cls;
