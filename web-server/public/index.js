@@ -58,6 +58,7 @@ window.onload = function() {
 				console.warn(data);
 				if(data.code == 200){
 					$scope.player = {name:$scope.username};
+					$scope.getPlayerList();
 				}else{
 					$scope.player = null;
 					
@@ -70,7 +71,7 @@ window.onload = function() {
 
 		// logout 
 		$scope.logout = function(){
-			var route = 'user.userHandler.logout';
+			var route = 'platform.platformHandler.logout';
 			var msg = {};
 			pomelo.request(route, msg, function(data) {
 				if(data.flag){
@@ -94,9 +95,10 @@ window.onload = function() {
 			});
 		};
 
+		// platform
 		// getPlayerList
 		$scope.getPlayerList = function () {
-			var route = 'user.userHandler.getPlayerList';
+			var route = 'platform.platformHandler.getPlayerList';
 			var msg = {};
 			pomelo.request(route, msg, function(data) {
 				console.warn('getPlayerList:', data);

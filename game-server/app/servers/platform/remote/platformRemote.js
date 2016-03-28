@@ -1,15 +1,18 @@
+var _ = require('underscore');
+var async = require('async');
+
 var Handler = (function(){
 	var cls = function(app) {
 		this.app=app;
 		this.platformService = this.app.get('platformService');
 
-		this._channelName = 'CHANNEL_PLATFORM';
+		this._channelName = 'platformChannel';
 	};
 
 	var staticHandler = cls;
 	var publicHandler = cls.prototype;
 
-	// static
+	// static 
 
 	// private
 
@@ -22,10 +25,18 @@ var Handler = (function(){
 				cb();
 			},
 			function(cb){
-				self.app.rpc.message.messageRemote.addUser(channelName,uid,sid,cb);
+				// message
+				self.app.rpc.message.messageRemote.addUser(self._channelName,uid,sid,cb);
+			},
+			function(cb){
+				// send message of 'platform.addUser'
+				var route = 'platform.addUser';
+				var msg = {uid:uid};
+				var channel = self._channelName;
+				self.app.rpc.message.messageRemote.send(route,msg,channel,cb);
 			}
 		],
-		function(err,data){
+		function(err,data){ 
 			next();
 		}
 		);
@@ -34,6 +45,32 @@ var Handler = (function(){
 
 	publicHandler.removeUser = function(uid,next){
 		var self = this;
+		async.series([
+			function(cb){
+				self.platformService.removeUser(uid);
+				cb();
+			},
+			function(cb){
+				// message
+				self.app.rpc.message.messageRemote.removeUser(self._channelName,uid,sid,cb);
+			},
+			function(cb){
+				// send message of 'platform.removeUser'
+				var route = 'platform.removeUser';
+				var msg = {uid:uid};
+				var channel = self._channelName;
+				self.app.rpc.message.messageRemote.send(route,msg,channel,cb);
+			}
+		],function(err,data){
+			next();
+		});
+	};
+
+
+	publicHandler.getUserList = function(next){
+		var self = this;
+		var userList = self.platformService.get();
+		next(null,userList);
 	};
 
 	return cls;

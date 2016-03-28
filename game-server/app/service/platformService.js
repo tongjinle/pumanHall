@@ -1,7 +1,10 @@
+'use strict'
+var Dict = require('../domain/dict');
+
 var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
-		this.list = [];
+		this.userList = new Dict();
 
 		console.log('platformService');
 	};
@@ -16,18 +19,18 @@ var Handler = (function(){
 	// public
 	publicHandler.addUser = function(uid,sid){
 		var self = this;
-		self.list.push(uid);
+		self.userList.add(uid);
 		
-		// self.app.rpc.
-		self.app.rpc.message.messageRemote.addUser('platformChannel',uid,sid,)
+		
 
-		console.log(self.list);
+		console.log(self.userList);
 
 
 	};
 
-	publicHandler.removeUser = function(){
+	publicHandler.removeUser = function(uid){
 		var self = this;
+		self.userList.remove(uid);
 	}; 
 
 

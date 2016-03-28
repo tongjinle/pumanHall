@@ -44,7 +44,7 @@ var Handler = (function(){
 				self.app.rpc.platform.platformRemote.addUser(session,uid,pwd,sid,cb);
 			}
 		],
-		(err,data)=> {
+		function(err,data){
 			next(null,{
 				code:200
 			});
