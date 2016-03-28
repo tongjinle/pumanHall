@@ -39,15 +39,11 @@ var Handler = (function(){
 			},
 			// login
 			function(cb){
-				console.warn(self.app.rpc);
-				console.warn(self === self);
 				self.app.rpc.platform.platformRemote.addUser(session,uid,pwd,sid,cb);
 			}
 		],
 		function(err,data){
-			next(null,{
-				code:200
-			});
+			next(null,{code:err?500:200,err:err,data:data});
 		}
 		);
 	};
@@ -61,7 +57,7 @@ var Handler = (function(){
 			self.app.rpc.platform.platformRemote.removeUser(session,uid,next);
 			return;
 		}
-		next();
+		next(null,{code:200});
 	};
 
 	return cls;

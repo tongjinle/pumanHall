@@ -74,10 +74,9 @@ window.onload = function() {
 			var route = 'platform.platformHandler.logout';
 			var msg = {};
 			pomelo.request(route, msg, function(data) {
-				if(data.flag){
+				if(data.code == 200){
 					$scope.player = null;
 					$scope.$apply();
-
 				}
 			});
 		};
@@ -98,7 +97,7 @@ window.onload = function() {
 		// platform
 		// getPlayerList
 		$scope.getPlayerList = function () {
-			var route = 'platform.platformHandler.getPlayerList';
+			var route = 'platform.platformHandler.getUserList';
 			var msg = {};
 			pomelo.request(route, msg, function(data) {
 				console.warn('getPlayerList:', data);
@@ -144,23 +143,22 @@ window.onload = function() {
 		init(function(){
 			// push message
 
-			pomelo.on('getPlayerList', function(playerList) {
-				$scope.playerList=playerList;
-				$scope.$apply();
-				console.warn('after getPlayerList->', $scope.playerList);
-			});
+			// pomelo.on('getPlayerList', function(playerList) {
+			// 	$scope.playerList=playerList;
+			// 	$scope.$apply();
+			// 	console.warn('after getPlayerList->', $scope.playerList);
+			// });
 
 
-			pomelo.on('addPlayer', function(player) {
-				if($scope.player && player.name == $scope.player.name){return;}
-				$scope.playerList.push(player);
+			pomelo.on('platform.addUser', function(user) {
+				$scope.playerList.push(user);
 				$scope.$apply();
 				console.warn('after addPlayer->', $scope.playerList);
 			});
 
-			pomelo.on('removePlayer', function(player) {
+			pomelo.on('platform.removeUser', function(uid) {
 				$scope.playerList = _.filter($scope.playerList, function(n) {
-					return n.name != player.name;
+					return n != uid;
 				});
 				$scope.$apply();
 				console.warn('after removePlayer->', $scope.playerList);

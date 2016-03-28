@@ -26,14 +26,15 @@ var Handler = (function(){
 			},
 			function(cb){
 				// message
-				self.app.rpc.message.messageRemote.addUser(self._channelName,uid,sid,cb);
+				self.app.rpc.message.messageRemote.addUser(null,self._channelName,uid,sid,cb);
 			},
 			function(cb){
 				// send message of 'platform.addUser'
 				var route = 'platform.addUser';
-				var msg = {uid:uid};
+				var user = self.platformService.getUser(uid);
+				var msg = user;
 				var channel = self._channelName;
-				self.app.rpc.message.messageRemote.send(route,msg,channel,cb);
+				self.app.rpc.message.messageRemote.send(null,route,msg,channel,cb);
 			}
 		],
 		function(err,data){ 
@@ -52,14 +53,14 @@ var Handler = (function(){
 			},
 			function(cb){
 				// message
-				self.app.rpc.message.messageRemote.removeUser(self._channelName,uid,sid,cb);
+				self.app.rpc.message.messageRemote.removeUser(null,self._channelName,uid,cb);
 			},
 			function(cb){
 				// send message of 'platform.removeUser'
 				var route = 'platform.removeUser';
 				var msg = {uid:uid};
 				var channel = self._channelName;
-				self.app.rpc.message.messageRemote.send(route,msg,channel,cb);
+				self.app.rpc.message.messageRemote.send(null,route,msg,channel,cb);
 			}
 		],function(err,data){
 			next();
@@ -69,7 +70,7 @@ var Handler = (function(){
 
 	publicHandler.getUserList = function(next){
 		var self = this;
-		var userList = self.platformService.get();
+		var userList = self.platformService.getUser();
 		next(null,userList);
 	};
 

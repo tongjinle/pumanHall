@@ -45,7 +45,7 @@ var Handler = (function(){
 
 		// uidMap
 		if(self.uidMap[uid]){
-			delete uidMap[uid];
+			delete self.uidMap[uid];
 		}
 
 		next();

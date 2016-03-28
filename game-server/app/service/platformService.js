@@ -1,5 +1,6 @@
 'use strict'
 var Dict = require('../domain/dict');
+var User = require('../domain/user');
 
 var Handler = (function(){
 	var cls = function(app) {
@@ -19,7 +20,7 @@ var Handler = (function(){
 	// public
 	publicHandler.addUser = function(uid,sid){
 		var self = this;
-		self.userList.add(uid);
+		self.userList.add(uid,new User(uid));
 		
 		
 
@@ -31,6 +32,11 @@ var Handler = (function(){
 	publicHandler.removeUser = function(uid){
 		var self = this;
 		self.userList.remove(uid);
+	};
+
+	publicHandler.getUser = function(uid){
+		var self = this;
+		return self.userList.get(uid);
 	}; 
 
 

@@ -15,9 +15,9 @@ var Handler = (function(){
 	// private
 
 	// public
-	publicHandler.getPlayerList = function(msg,session,next){
+	publicHandler.getUserList = function(msg,session,next){
 		var self = this;
-		self.app.rpc.platform.platformRemote.getPlayerList(session,next);
+		self.app.rpc.platform.platformRemote.getUserList(session,next);
 		return;
 	};
 
