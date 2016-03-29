@@ -29,8 +29,29 @@ window.onload = function() {
 			$scope.$on('connector.afterInit',function(){
 				$scope.isConnected = true;
 				$scope.$apply();
-			})
+			});
+
+
+			////////////////////////////////////////////////////
+			// pomelo on
+			////////////////////////////////////////////////////
+			
+			pomelo.on('platform.addUser', function(user) {
+				$scope.playerList.push(user);
+				$scope.$apply();
+				console.warn('after addPlayer->', $scope.playerList);
+			});
+
+			pomelo.on('platform.removeUser', function(uid) {
+				$scope.playerList = _.filter($scope.playerList, function(n) {
+					return n != uid;
+				});
+				$scope.$apply();
+				console.warn('after removePlayer->', $scope.playerList);
+			});
 		};
+
+
 
 		$scope.queryGate = function(){
 			pomelo.init({host: gateConf.host, port: gateConf.port, log: true }, function(data){
@@ -61,7 +82,6 @@ window.onload = function() {
 					$scope.getPlayerList();
 				}else{
 					$scope.player = null;
-					
 				}
 				$scope.$apply();
 				// $scope.getPlayerList();
@@ -74,8 +94,11 @@ window.onload = function() {
 			var route = 'platform.platformHandler.logout';
 			var msg = {};
 			pomelo.request(route, msg, function(data) {
+				console.log(data);
 				if(data.code == 200){
 					$scope.player = null;
+					// 因为已经登出,所以playerList自动清空
+					$scope.playerList = [];
 					$scope.$apply();
 				}
 			});
@@ -150,19 +173,6 @@ window.onload = function() {
 			// });
 
 
-			pomelo.on('platform.addUser', function(user) {
-				$scope.playerList.push(user);
-				$scope.$apply();
-				console.warn('after addPlayer->', $scope.playerList);
-			});
-
-			pomelo.on('platform.removeUser', function(uid) {
-				$scope.playerList = _.filter($scope.playerList, function(n) {
-					return n != uid;
-				});
-				$scope.$apply();
-				console.warn('after removePlayer->', $scope.playerList);
-			});
 
 			pomelo.on('updatePlayer',function(player){
 				var index = _.findIndex($scope.playerList,function(p){return p.name == player.name});
