@@ -1,4 +1,3 @@
-var colors = require('colors');
 var async = require('async');
 var _ = require('underscore');
 

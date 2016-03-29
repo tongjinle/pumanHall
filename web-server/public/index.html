@@ -82,8 +82,8 @@
 				<div class="g-button" class="g-button" ng-show="player">
 					<div class="chatList">
 						<div class="item" ng-class="{'mate':player.name!=n.sender,'self':player.name==n.sender}" ng-repeat="n in chatList">
-							<div class="sender">{{n.sender == player.name ? '我' : n.sender}}:</div>
-							<div class="text">{{n.content}}</div>
+							<div class="sender">{{n.sender == player.name ? ':我' : n.sender+':'}}</div>
+							<div class="text" ng-class="{'isPrivate':n.isPrivate}">{{n.content}}</div>
 						</div>
 					</div>
 					<select class="mates" ng-model="reciver">

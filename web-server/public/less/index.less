@@ -42,6 +42,7 @@ body{
 		.item{
 			@itemHeight:50px;
 			height: @itemHeight;
+			margin-bottom:10px; 
 			&.mate,&.self{
 				.sender{
 					text-align: center;
@@ -58,6 +59,10 @@ body{
 					height: @itemHeight;
 					line-height: @itemHeight;
 					min-width: 100px;
+					&.isPrivate{
+						background-color: black;
+						color:white;
+					}
 				}
 			}
 			@margin:20px;

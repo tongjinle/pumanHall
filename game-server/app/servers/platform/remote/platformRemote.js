@@ -81,16 +81,17 @@ var Handler = (function(){
 	publicHandler.chat = function(sender,reciver,content,next){
 		var self = this;
 		var route = 'platform.chat';
-		var msg = {sender:sender,reciver:reciver,content:content};
+		var msg;
+		var isPrivate = false;
 		var channelName;
 		if(reciver == '*'){
 			channelName = self._channelName;
 		}else{
-			channelName = [reciver];
+			channelName = [sender,reciver];
+			isPrivate = true;
 		}
+		msg = {sender:sender,reciver:reciver,content:content,isPrivate};
 		self.app.rpc.message.messageRemote.send(null,route,msg,channelName,next);
-		// route,msg,channelName,next
-		// next();
 	};
 
 	return cls;

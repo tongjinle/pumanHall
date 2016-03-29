@@ -84,11 +84,7 @@ window.onload = function() {
 			});
 
 			pomelo.on('platform.chat',function(chat){
-				$scope.chatList.push({
-					sender:chat.sender,
-					reciver:chat.reciver,
-					content:chat.content
-				});
+				$scope.chatList.push(chat);
 				$scope.$apply();
 			});
 
