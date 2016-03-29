@@ -25,7 +25,7 @@ var Handler = (function(){
 	publicHandler.logout = function(msg,session,next){
 		var self = this;
 		var uid = session.uid;
-		
+
 		async.series([
 			function(cb){
 				session.unbind(uid,cb);
@@ -44,6 +44,17 @@ var Handler = (function(){
 		var changes = msg;
 		self.app.rpc.platform.platformRemote.update(session,username,changes,next);
 
+	};
+
+	// chat
+	publicHandler.chat = function(msg,session,next){
+		var self = this;
+
+		var sender = session.uid;
+		var reciver = msg.reciver;
+		var content = msg.content;
+
+		self.app.rpc.platform.platformRemote.chat(session,sender,reciver,content,next);
 	};
 
 	return cls;

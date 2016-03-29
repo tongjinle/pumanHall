@@ -1,10 +1,13 @@
+body{
+	color:white;
+	font-size: 2em;
+}
+
 .loginStatus{
 	width:120px;
 	height: 40px;
 	line-height: 40px;
-	color:white;
 	float: right;
-	font-size: 28px;
 	text-align: center;
 }
 .login{
@@ -28,4 +31,95 @@
 	background: gray;
 	cursor: pointer;;
 
+}
+
+.platform{
+	.chatList{
+		margin: 0 auto;
+		width: 800px;
+		height: 400px;
+		overflow-y: scroll;
+		.item{
+			@itemHeight:50px;
+			height: @itemHeight;
+			&.mate,&.self{
+				.sender{
+					text-align: center;
+					font-size: 30px;
+					height: @itemHeight;
+					line-height: @itemHeight;
+
+				}
+				.text{
+					text-indent: 10px;
+					text-align: left;
+					font-size: 18px;
+					border-radius: 5px;
+					height: @itemHeight;
+					line-height: @itemHeight;
+					min-width: 100px;
+				}
+			}
+			@margin:20px;
+			&.mate{
+				.sender,.text{
+					float: left;
+					margin-left: @margin;
+				}
+				.text{
+					background-color: olive;
+				}
+			}
+			&.self{
+				.sender,.text{
+					float: right;
+					margin-right: @margin;
+				}
+				.text{
+					background-color: lightgreen;
+				}	
+			}
+		}
+	}
+
+	@height:40px;
+	@fontSize:20px;
+	select.mates{
+		font-size: @fontSize;
+		width: 10%;
+		height: @height;
+	}
+
+	.messageBox{
+		font-size: @fontSize;
+		width:60%;
+		height: @height;
+	}
+
+	.sendButton{
+		font-size: @fontSize;
+		width:10%;
+		height: @height;
+		background-color: gray;
+		cursor: pointer;
+		&:hover{
+			background-color: steelblue;
+		}
+	}
+}
+
+.changePart{
+	margin: 0 auto;
+	width: 400px;
+	.button{
+		float: left;
+		width: 100px;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		font-size: 2em;
+		margin: 5px;
+		background-color: olive;
+		cursor:pointer;
+	}
 }

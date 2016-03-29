@@ -10,6 +10,30 @@ window.onload = function() {
 		$scope.pwd='test123';
 		$scope.playerList = [];
 
+
+		// 发送对象 
+		$scope.reciver = null;
+		// platform同伴
+		$scope.platformMates = [];
+		// 聊天记录
+		$scope.chatList = [];
+
+		// 当前显示区域
+		$scope.part = 'platform'; // 默认展示platform区域,方便登录
+
+		// 切换显式区域
+		$scope.changePart = function(part){
+			$scope.part = part;
+		};
+		// 发送信息(platform)
+		$scope.send = function(reciver,word){
+			var msg = {
+				reciver:reciver,
+				word:word
+			};
+			pomelo.request('platform.platformHandler.chat',msg,function(){});
+		};
+
 		var gateConf = {
 			host:'127.0.0.1',
 			port:'3010'
@@ -31,6 +55,15 @@ window.onload = function() {
 				$scope.$apply();
 			});
 
+			$scope.$watch('playerList.length',function(nv,ov){
+				// 必须已经登录
+				$scope.refreshMates();
+			},true);
+
+			$scope.$watch('player',function(){
+				$scope.refreshMates();
+			});
+
 
 			////////////////////////////////////////////////////
 			// pomelo on
@@ -49,6 +82,17 @@ window.onload = function() {
 				$scope.$apply();
 				console.warn('after removePlayer->', $scope.playerList);
 			});
+
+			pomelo.on('platform.chat',function(chat){
+				$scope.chatList.push({
+					sender:chat.sender,
+					reciver:chat.reciver,
+					content:chat.content
+				});
+				$scope.$apply();
+			});
+
+
 		};
 
 
@@ -129,7 +173,32 @@ window.onload = function() {
 			});
 		};
 
+		// 刷新聊天列表
+		$scope.refreshMates = function () {
+			// 必须已经登录
+			if($scope.player){
+				$scope.platformMates = _.without(_.map($scope.playerList,function(n){return n.name;}),$scope.player?$scope.player.name:'');
+				$scope.platformMates.unshift('*');
+				$scope.reciver = _.find($scope.platformMates,function(n){return n == $scope.reciver;}) ? $scope.reciver : ($scope.platformMates[0] || '');
+			}
+		};
 
+		// 发送信息
+		$scope.send = function(){
+			var route = 'platform.platformHandler.chat';
+			var msg = {
+				reciver:$scope.reciver,
+				content:$scope.content
+			};
+			pomelo.request(route,msg,function(data){
+				$scope.content = '';
+			});
+		};
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
 		// getHallList
 		$scope.getHallList = function(){
 			var route = 'hall.hallHandler.getHallList';

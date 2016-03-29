@@ -77,6 +77,22 @@ var Handler = (function(){
 		next(null,userList);
 	};
 
+
+	publicHandler.chat = function(sender,reciver,content,next){
+		var self = this;
+		var route = 'platform.chat';
+		var msg = {sender:sender,reciver:reciver,content:content};
+		var channelName;
+		if(reciver == '*'){
+			channelName = self._channelName;
+		}else{
+			channelName = [reciver];
+		}
+		self.app.rpc.message.messageRemote.send(null,route,msg,channelName,next);
+		// route,msg,channelName,next
+		// next();
+	};
+
 	return cls;
 
 }).call(this);

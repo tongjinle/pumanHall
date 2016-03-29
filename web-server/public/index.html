@@ -65,30 +65,53 @@
 								<td ng-class="{'inHall':myHallName==h.name,'outHall':myHallName!=h.name}" ng-click="enterHall(h.name)">{{myHallName==h.name?'当前大厅':'进入大厅'}}</td>
 							</tr>
 						</tbody>
-
-
 					</table>
 				</div>
 			</div>
-			<div class="g-button">
-				<input ng-model="username" type="text" ></input>
-				<input ng-model="pwd" type="text" ></input>
+			<div ng-show="part=='platform'" class="platform">
+				<div class="g-button">
+					<input ng-model="username" type="text" ></input>
+					<input ng-model="pwd" type="text" ></input>
+				</div>
+				<div class="g-button">
+					<input type="button" value="login" ng-click="login()"/>
+					<input type="button" value="logout" ng-click="logout()"/>
+					<input type="button" value="update" ng-click="update()"/>
+					<input type="button" value="getPlayerList" ng-click="getPlayerList()"/>
+				</div>
+				<div class="g-button" class="g-button" ng-show="player">
+					<div class="chatList">
+						<div class="item" ng-class="{'mate':player.name!=n.sender,'self':player.name==n.sender}" ng-repeat="n in chatList">
+							<div class="sender">{{n.sender == player.name ? '我' : n.sender}}:</div>
+							<div class="text">{{n.content}}</div>
+						</div>
+					</div>
+					<select class="mates" ng-model="reciver">
+						<option ng-repeat="p in platformMates">{{p}}</option>
+					</select>
+					<input type="text" class="messageBox" ng-model='content' />
+					<input type="button" class="sendButton" ng-click="send()" value="SEND" />
+				</div>
 			</div>
-			<div class="g-button">
-				<input type="button" value="login" ng-click="login()"/>
-				<input type="button" value="logout" ng-click="logout()"/>
-				<input type="button" value="update" ng-click="update()"/>
-				<input type="button" value="getPlayerList" ng-click="getPlayerList()"/>
+			<div ng-show="part=='hall'">
+				<div class="g-button">
+				<input type="button" value="enterHall" ng-click="enterHall()"/>
+				<input type="button" value="quitHall" ng-click="quitHall()"/>
+				<input type="button" value="enterRoom1" ng-click="enterRoom(1)"/>
+				<input type="button" value="enterRoom2" ng-click="enterRoom(2)"/>
+				<input type="button" value="quitRoom" ng-click="quitRoom()"/>
+				</div>
 			</div>
-			<div class="g-button">
-			<input type="button" value="enterHall" ng-click="enterHall()"/>
-			<input type="button" value="quitHall" ng-click="quitHall()"/>
-			<input type="button" value="enterRoom1" ng-click="enterRoom(1)"/>
-			<input type="button" value="enterRoom2" ng-click="enterRoom(2)"/>
-			<input type="button" value="quitRoom" ng-click="quitRoom()"/>
+			<div ng-show="part=='room'">
+				<div class="g-button">
+					<input type="button" value="beReady" ng-click="beReady()"/>
+				</div>
 			</div>
-			<div class="g-button">
-				<input type="button" value="beReady" ng-click="beReady()"/>
+			<hr />
+			<div class="changePart">
+				<div class='button' ng-click="changePart('platform')">platform</div>
+				<div class='button' ng-click="changePart('hall')">hall</div>
+				<div class='button' ng-click="changePart('room')">room</div>
 			</div>
 		</div>
 	</body>
