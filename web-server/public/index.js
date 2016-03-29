@@ -35,7 +35,7 @@ window.onload = function() {
 			////////////////////////////////////////////////////
 			// pomelo on
 			////////////////////////////////////////////////////
-			
+
 			pomelo.on('platform.addUser', function(user) {
 				$scope.playerList.push(user);
 				$scope.$apply();
@@ -44,7 +44,7 @@ window.onload = function() {
 
 			pomelo.on('platform.removeUser', function(uid) {
 				$scope.playerList = _.filter($scope.playerList, function(n) {
-					return n != uid;
+					return n.name != uid;
 				});
 				$scope.$apply();
 				console.warn('after removePlayer->', $scope.playerList);

@@ -1,3 +1,4 @@
+var async = require('async');
 var _ = require('underscore');
 // var userRemote = require('../remote/userRemote');
 
@@ -24,7 +25,17 @@ var Handler = (function(){
 	publicHandler.logout = function(msg,session,next){
 		var self = this;
 		var uid = session.uid;
-		self.app.rpc.platform.platformRemote.removeUser(session,uid,next);
+		
+		async.series([
+			function(cb){
+				session.unbind(uid,cb);
+			},
+			function(cb){
+				self.app.rpc.platform.platformRemote.removeUser(session,uid,cb);
+			}
+		],function(err,data){
+			next(null,{code:err?500:200,err:err,data:data});
+		});
 	};
 
 	publicHandler.update = function(msg,session,next){

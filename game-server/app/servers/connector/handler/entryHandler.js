@@ -1,6 +1,6 @@
+var colors = require('colors');
 var async = require('async');
 var _ = require('underscore');
-
 
 var Handler = (function(){
 	var cls = function(app) {
@@ -22,7 +22,8 @@ var Handler = (function(){
 		var sid = self.app.get('serverId');
 
 		session.on('closed',function(session){
-			self.logout(msg,session,next);
+			console.log('session closed:'+(session.uid+'').blue);
+			self.logout(msg,session,function(){});
 		});
 
 		async.series(
@@ -53,8 +54,19 @@ var Handler = (function(){
 		var self = this;
 		var uid = session.uid;
 		if(uid){
-			session.unbind(uid);
-			self.app.rpc.platform.platformRemote.removeUser(session,uid,next);
+			async.series([
+				function(cb){
+					// console.error('session.unbind');
+					// session.unbind(uid,cb);
+					cb();
+				},
+				function(cb){
+					console.error('platformRemote.removeUser');
+					self.app.rpc.platform.platformRemote.removeUser(session,uid,cb);
+				}
+			],function(err,data){
+				next(null,{code:err?500:200,err:err,data:data});
+			});
 			return;
 		}
 		next(null,{code:200});

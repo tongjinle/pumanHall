@@ -1,4 +1,3 @@
-'use strict';
 var _ = require('underscore');
 
 var Handler = (function(){
@@ -20,6 +19,8 @@ var Handler = (function(){
 
 	// public
 	publicHandler.addUser = function(channelName,uid,sid,next){
+		console.error('message.addUser->','channelName,uid,sid,next');
+		console.error('message.addUser->',arguments);
 		var self = this;
 
 		// channel
@@ -34,6 +35,8 @@ var Handler = (function(){
 
 
 	publicHandler.removeUser = function(channelName,uid,next){
+		console.error('message.removeUser->','channelName,uid,next');
+		console.error('message.removeUser->',arguments);
 		var self = this;
 
 		// channel
@@ -55,6 +58,8 @@ var Handler = (function(){
 	// basic 
 	// channelName -> channelName OR uids
 	publicHandler.send = function(route,msg,channelName,next){
+		console.error('message.send->','route,msg,channelName,next');
+		console.error('message.send->',arguments);
 		var self = this;
 
 		// when uids

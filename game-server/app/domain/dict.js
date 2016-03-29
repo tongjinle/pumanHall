@@ -24,6 +24,7 @@ var Dict = (function(){
 	publicHandler.get = function(key){
 		var self = this;
 		if(key === undefined){
+			// 转换成array
 			return _.map(self._dict,function(v,k){return v;});
 		}else{
 			return self._dict[key];

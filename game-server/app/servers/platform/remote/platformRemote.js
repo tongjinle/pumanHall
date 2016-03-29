@@ -21,7 +21,11 @@ var Handler = (function(){
 		var self = this;
 		async.series([
 			function(cb){
+				cb(!!self.platformService.getUser(uid));
+			},
+			function(cb){
 				self.platformService.addUser(uid);
+				console.error('after addUsers ->',self.platformService.getUser(),self.platformService.userList);
 				cb();
 			},
 			function(cb){
@@ -37,9 +41,7 @@ var Handler = (function(){
 				self.app.rpc.message.messageRemote.send(null,route,msg,channel,cb);
 			}
 		],
-		function(err,data){ 
-			next();
-		}
+		next
 		);
 	};
 
@@ -49,6 +51,7 @@ var Handler = (function(){
 		async.series([
 			function(cb){
 				self.platformService.removeUser(uid);
+				console.error('after removeUser ->',self.platformService.getUser(),self.platformService.userList);
 				cb();
 			},
 			function(cb){
@@ -58,7 +61,7 @@ var Handler = (function(){
 			function(cb){
 				// send message of 'platform.removeUser'
 				var route = 'platform.removeUser';
-				var msg = {uid:uid};
+				var msg = uid;
 				var channel = self._channelName;
 				self.app.rpc.message.messageRemote.send(null,route,msg,channel,cb);
 			}

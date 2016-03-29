@@ -11,8 +11,7 @@
 		]
 		,
 		"platform":[
-			{"id": "platform-server-1", "host": "127.0.0.1", "port": 5151},
-			{"id": "platform-server-2", "host": "127.0.0.1", "port": 5152}
+			{"id": "platform-server-1", "host": "127.0.0.1", "port": 5151}			
 
 		]
 		,
