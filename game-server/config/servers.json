@@ -15,8 +15,14 @@
 
 		]
 		,
+		"hall":[
+			{"id": "hall-server-1", "host": "127.0.0.1", "port": 6150, "hallName":"poker", "gameName":"poker"},		
+			{"id": "hall-server-2", "host": "127.0.0.1", "port": 6151, "hallName":"21point-1", "gameName":"21point"},			
+			{"id": "hall-server-3", "host": "127.0.0.1", "port": 6152, "hallName":"21point-2", "gameName":"21point"}			
+		]
+		,
 		"message":[
-			{"id": "message-server-1", "host": "127.0.0.1", "port": 6151}
+			{"id": "message-server-1", "host": "127.0.0.1", "port": 9151}
 
 		]
 	},

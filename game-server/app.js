@@ -1,4 +1,5 @@
 var pomelo = require('pomelo');
+var routeUtil = require('./app/util/routeUtil');
 var PlatformService = require("./app/service/platformService");
 
 /**
@@ -29,6 +30,19 @@ app.configure('production|development', 'gate', function(){
 app.configure('production|development', 'platform', function(){
 	app.set('platformService',new PlatformService());
 });
+
+app.configure('production|development', 'hall', function(){
+	var self = this;
+	console.error('app.curServer');
+	console.error(app.curServer);
+	var server = app.curServer;
+
+});
+
+
+// route
+app.route('hall',routeUtil.hall);
+
 
 // start app
 app.start();

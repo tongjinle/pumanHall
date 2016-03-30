@@ -1,3 +1,36 @@
+// 大厅
+var _ = require('underscore');
+var async = require('async');
+var hallConfig = require('../../../config/hallConfig');
+
+var Handler = (function(){
+	var cls = function(app) {
+		this.app = app;
+		// this.hall = new Hall(this.app.get)
+		console.error('-->',app.curServer);
+	};
+
+	var staticHandler = cls;
+	var publicHandler = cls.prototype;
+
+	// static
+
+	// private
+
+	// public
+	publicHandler.getInfo = function(next){
+		var self = this;
+
+		var info = self.hall.getInfo();
+		next(null,info);
+	};
+
+	return cls;
+
+}).call(this);
+
+
+
 // // 大厅
 
 // var _ = require('underscore');

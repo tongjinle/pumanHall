@@ -57,6 +57,23 @@ var Handler = (function(){
 		self.app.rpc.platform.platformRemote.chat(session,sender,reciver,content,next);
 	};
 
+
+	////////////////////////////////////////////////////////////////
+	// HALL
+	////////////////////////////////////////////////////////////////
+
+	publicHandler.getHallList = function(msg,session,next){
+		var self = this;
+
+		var hallServerList = self.app.getServersByType('hall');
+		async.each(hallServerList,function(serv,cb){
+			var hallName = serv.get('hallName');
+			self.app.rpc.hall.hallRemote.getInfo(hallName,cb);
+		},function(err,data){
+			next(null,data);
+		});
+	};
+
 	return cls;
 
 }).call(this);
