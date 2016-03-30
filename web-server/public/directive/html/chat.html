@@ -1,0 +1,13 @@
+<div class="chatContainer g-button" ng-show="username">
+	<div class="chatList">
+		<div class="item" ng-class="{'mate':username!=n.sender,'self':username==n.sender}" ng-repeat="n in chatList">
+			<div class="sender">{{n.sender == username ? ':我' : n.sender+':'}}</div>
+			<div class="text" ng-class="{'isPrivate':n.isPrivate}">{{n.content}}</div>
+		</div>
+	</div>
+	<select class="mates" ng-model="reciver">
+		<option ng-repeat="p in mates">{{p}}</option>
+	</select>
+	<input type="text" class="messageBox" ng-model='content' />
+	<input type="button" class="sendButton" ng-click="send()" value="SEND" />
+</div>

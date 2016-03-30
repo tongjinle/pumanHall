@@ -18,12 +18,15 @@ module.exports = function (grunt) {
 					'public/**/*.html',
 					'public/css/bundle.css',
 					'public/js/**/*.js', 
-					'public/index.js', 
+					'public/script/**/*.js', 
+					'public/controller/**/*.js', 
+					'public/directive/script/**/*.js'
 				]  
 			},
 			less:{
 				files:[
-					'public/less/**/*.less'
+					'public/less/**/*.less',
+					'public/directive/less/**/*.less'
 				],
 				tasks:["less"]
 			}
