@@ -37,10 +37,16 @@ var Handler = (function(){
 				self.app.rpc.message.messageRemote.addUser(channelName,uid,sid,cb);
 			},
 			function(cb){
+				// 告知hall中其他成员,有新成员的加入
+				var route = 'hall.addUser';
+				var msg = {username:uid};
+				var channelName = self.hall.name;
+				self.app.rpc.message.messageRemote.send(route,msg,channelName,cb);
+			},
+			function(cb){
 				// 通知platform中user状态的改变
 				var changes = {
-					hallName:self.hall.name,
-					status:1
+					hallName:self.hall.name
 				};
 				self.app.rpc.platform.platformRemote.updateUser(null,uid,changes,cb);
 			}
@@ -48,6 +54,49 @@ var Handler = (function(){
 
 
 	};
+
+	publicHandler.quitHall = function(uid,next){
+		var self = this;
+
+		async.series([
+			function(cb){
+				// 离开chat频道
+				var channelName = self.hall.name;
+				self.app.rpc.message.messageRemote.removeUser(channelName,uid,cb);
+			},
+			function(cb){
+				// 告知hall中其他成员,有新成员的加入
+				var route = 'hall.removeUser';
+				var msg = {username:uid};
+				var channelName = self.hall.name;
+				self.app.rpc.message.messageRemote.send(route,msg,channelName,cb);
+			},
+			function(cb){
+				// 通知platform中user状态的改变
+				var changes = {
+					hallName:null
+				};
+				self.app.rpc.platform.platformRemote.updateUser(null,uid,changes,cb);
+			}
+		],next);
+	};
+
+	publicHandler.chat = function(sender,reciver,content,next){
+		var self = this;
+		var route = 'hall.chat';
+		var msg;
+		var isPrivate = false;
+		var channelName;
+		if(reciver == '*'){
+			channelName = self._channelName;
+		}else{
+			channelName = [sender,reciver];
+			isPrivate = true;
+		}
+		msg = {sender:sender,reciver:reciver,content:content,isPrivate};
+		self.app.rpc.message.messageRemote.send(null,route,msg,channelName,next);
+
+	}
 
 	return cls;
 
