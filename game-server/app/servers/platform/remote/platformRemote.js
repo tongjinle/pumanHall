@@ -70,12 +70,31 @@ var Handler = (function(){
 		});
 	};
 
+	publicHandler.updateUser =function(uid,changes,next){
+		var self = this;
+
+		var user = self.platformService.getUser(uid);
+		_.each(changes,function(v,k){
+			if(!_.isUndefined(user[k])){
+				user[k] = v;
+			}
+		});
+
+		// notify all users in platform
+		var route = 'platform.updateUser';
+		var msg = user;
+		var channel = self._channelName;
+		self.app.rpc.message.messageRemote.send(null,route,msg,channel,next);
+
+
+	};
 
 	publicHandler.getUserList = function(next){
 		var self = this;
 		var userList = self.platformService.getUser();
 		next(null,userList);
 	};
+
 
 
 	publicHandler.chat = function(sender,reciver,content,next){

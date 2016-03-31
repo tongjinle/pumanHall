@@ -66,13 +66,32 @@ var Handler = (function(){
 		var self = this;
 
 		var hallServerList = self.app.getServersByType('hall');
+		console.error('getHallList in platformHandler');
+		console.error(hallServerList);
+
+		var hallList = [];
 		async.each(hallServerList,function(serv,cb){
-			var hallName = serv.get('hallName');
-			self.app.rpc.hall.hallRemote.getInfo(hallName,cb);
-		},function(err,data){
-			next(null,data);
+			var hallName = serv.hallName;
+			console.error('hallRemote in platformHandler');
+			console.error(self.app.rpc.hall.hallRemote);
+			self.app.rpc.hall.hallRemote.getInfo(hallName,function(err,data){
+				hallList.push(data);
+				cb(err);
+			});
+		},function(err){
+			next(null,hallList);
 		});
 	};
+
+	publicHandler.enterHall = function(msg,session,next){
+		var self = this;
+
+		var hallName = msg.hallName;
+		var uid = session.uid;
+		var sid = session.sid;
+		self.app.rpc.hall.hallRemote.enterHall(hallName,uid,sid,next);
+	};
+
 
 	return cls;
 

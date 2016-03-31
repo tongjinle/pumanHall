@@ -6,8 +6,9 @@ var hallConfig = require('../../../config/hallConfig');
 var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
+		this.hall = this.app.get('hall');
 		// this.hall = new Hall(this.app.get)
-		console.error('-->',app.curServer);
+		// console.error('-->',app.curServer);
 	};
 
 	var staticHandler = cls;
@@ -22,13 +23,41 @@ var Handler = (function(){
 		var self = this;
 
 		var info = self.hall.getInfo();
+		console.error(self.hall.name,'->',info);
 		next(null,info);
+	};
+
+	publicHandler.enterHall = function(uid,sid,next){
+		var self = this;
+		
+		async.series([
+			function(cb){
+				// 加入chat频道
+				var channelName = self.hall.name;
+				self.app.rpc.message.messageRemote.addUser(channelName,uid,sid,cb);
+			},
+			function(cb){
+				// 通知platform中user状态的改变
+				var changes = {
+					hallName:self.hall.name,
+					status:1
+				};
+				self.app.rpc.platform.platformRemote.updateUser(null,uid,changes,cb);
+			}
+		],next);
+
+
 	};
 
 	return cls;
 
 }).call(this);
 
+
+
+module.exports = function(app) {
+	return new Handler(app);
+};
 
 
 // // 大厅

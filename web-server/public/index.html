@@ -52,23 +52,6 @@
 							</tr>
 						</tbody>
 					</table>
-					<hr/>
-					<table>
-						<thead>
-							<td>大厅名称</td>
-							<td>状态</td>
-							<td>人数</td>
-							<td> - - </td>
-						</thead>
-						<tbody>
-							<tr ng-repeat="h in hallList">
-								<td>{{[h.name, h.gameName].join('-')}}</td>
-								<td>{{h.status}}</td>
-								<td>{{h.playerCount}}</td>
-								<td ng-class="{'inHall':myHallName==h.name,'outHall':myHallName!=h.name}" ng-click="enterHall(h.name)">{{myHallName==h.name?'当前大厅':'进入大厅'}}</td>
-							</tr>
-						</tbody>
-					</table>
 				</div>
 			</div>
 			<div ng-show="part=='platform'" class="platform">
@@ -85,11 +68,32 @@
 				<chat name="platform"></chat>
 			</div>
 			<div ng-show="part=='hall'">
+				<div class="g-content" ng-show="hallList.length">
+					<table>
+						<thead>
+							<tr>
+								<td>大厅名</td>
+								<td>游戏名</td>
+								<td>房间数量</td>
+								<td>人数</td>
+								<td>状态</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="n in hallList">
+								<td>{{n.hallName}}</td>
+								<td>{{n.gameName}}</td>
+								<td>0</td>
+								<td>{{n.userCount}}</td>
+								<td>{{n.status}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 				<div class="g-button">
+				<input type="button" value="getHallList" ng-click="getHallList()"/>
 				<input type="button" value="enterHall" ng-click="enterHall()"/>
 				<input type="button" value="quitHall" ng-click="quitHall()"/>
-				<input type="button" value="enterRoom1" ng-click="enterRoom(1)"/>
-				<input type="button" value="enterRoom2" ng-click="enterRoom(2)"/>
 				<input type="button" value="quitRoom" ng-click="quitRoom()"/>
 				</div>
 			</div>

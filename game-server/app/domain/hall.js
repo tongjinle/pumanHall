@@ -1,7 +1,7 @@
 // 大厅是房间的"管理者"
 var _ = require('underscore');
 var Dict = require('./dict');
-var Room = require('./room');
+// var Room = require('./room');
 
 var Hall = (function(){
 	var cls = function(hallName,gameName,status) {
@@ -63,6 +63,18 @@ var Hall = (function(){
 	publicHandler.findPlayer = function(username){
 		var self = this;
 		return self.playerList.get(username);
+	};
+
+
+	// 返回信息
+	publicHandler.getInfo = function(){
+		var self = this;
+		return {
+			hallName:self.name,
+			gameName:self.gameName,
+			status:self.status,
+			userCount:self.playerList.count()
+		};
 	};
 
 	return cls;

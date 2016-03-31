@@ -33,9 +33,13 @@ app.configure('production|development', 'platform', function(){
 
 app.configure('production|development', 'hall', function(){
 	var self = this;
-	console.error('app.curServer');
-	console.error(app.curServer);
+	// console.error('app.curServer');
+	// console.error(app.curServer);
 	var server = app.curServer;
+
+	var Hall = require('./app/domain/hall');
+	var hall = new Hall(server.hallName,server.gameName,'open');
+	app.set('hall',hall);
 
 });
 

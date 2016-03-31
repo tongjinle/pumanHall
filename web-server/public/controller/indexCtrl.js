@@ -52,6 +52,12 @@ app.controller('hallCtrl', ['$scope', function($scope) {
 			$scope.getPlayerList();
 		});
 
+		$scope.$on('afterLogin',function(e,args){
+			$scope.changePart('hall');
+
+			$scope.getHallList();
+		});
+
 		// chat要求发送消息
 		$scope.$on('chat.send',function(e,args){
 			var name = args.name;
@@ -240,7 +246,7 @@ app.controller('hallCtrl', ['$scope', function($scope) {
 
 	// 获取大厅列表
 	$scope.getHallList = function(){
-		var route = 'hall.hallHandler.getHallList';
+		var route = 'platform.platformHandler.getHallList';
 		var msg = {};
 		pomelo.request(route,msg,function(data){
 			console.warn('getHallList',data);
