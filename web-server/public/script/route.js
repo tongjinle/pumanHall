@@ -10,7 +10,6 @@ define(["app",
 						templateUrl:"view/platformpage.html",
 						controller:"platformpageCtrl"
 					})
-
 					.otherwise({
 						redirectTo:"/"
 					});

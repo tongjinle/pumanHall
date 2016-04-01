@@ -21,7 +21,7 @@ requirejs.config({
 		"ctrl-platformpage":"controller/platformpageCtrl",
 
 		// directive
-		// "directive-test":"directive/script/test",
+		"directive-platform":"directive/script/platform",
 
 		// end tail
 		"jquery":"bower_components/jquery/dist/jquery.min"

@@ -1,84 +1,40 @@
-<div class="g-doc" ng-show="isConnected">
-			<div class="g-banner" style="border:none">
-				<div class="logo">
-					<div class="img"></div>
-				</div>
-			</div>
-			<div class="loginStatus" ng-class="{'login':player,'logout':!player}">{{player?player.name:'未登录'}}</div>
-			<div class="g-background">
-				<div class="g-content">
-					<table >
-						<thead>
-							<td>玩家名</td>
-							<td>大厅</td>
-							<td>房间</td>
-							<td>游戏名</td>
-							<td>游戏状态</td>
-						</thead>
-						<tbody>
-							<tr ng-repeat="p in playerList">
-								<td>{{p.name}}</td>
-								<td>{{p.hallName||'空'}}</td>
-								<td>{{p.roomName||'空'}}</td>
-								<td>{{p.gameName||'空'}}</td>
-								<td>{{['未进房间','待准备','已准备','游戏中'][p.gameStatus+1]}}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div ng-show="part=='platform'" class="platform">
-				<div class="g-button">
-					<input ng-model="username" type="text" ></input>
-					<input ng-model="pwd" type="text" ></input>
-				</div>
-				<div class="g-button">
-					<input type="button" value="login" ng-click="login()"/>
-					<input type="button" value="logout" ng-click="logout()"/>
-					<input type="button" value="update" ng-click="update()"/>
-					<input type="button" value="getPlayerList" ng-click="getPlayerList()"/>
-				</div>
-				<chat name="platform"></chat>
-			</div>
-			<div ng-show="part=='hall'">
-				<div class="g-content" ng-show="hallList.length">
-					<table>
-						<thead>
-							<tr>
-								<td>大厅名</td>
-								<td>游戏名</td>
-								<td>房间数量</td>
-								<td>人数</td>
-								<td>状态</td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="n in hallList">
-								<td>{{n.hallName}}</td>
-								<td>{{n.gameName}}</td>
-								<td>0</td>
-								<td>{{n.userCount}}</td>
-								<td>{{n.status}}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="g-button">
-				<input type="button" value="getHallList" ng-click="getHallList()"/>
-				<input type="button" value="enterHall" ng-click="enterHall()"/>
-				<input type="button" value="quitHall" ng-click="quitHall()"/>
-				<input type="button" value="quitRoom" ng-click="quitRoom()"/>
-				</div>
-			</div>
-			<div ng-show="part=='room'">
-				<div class="g-button">
-					<input type="button" value="beReady" ng-click="beReady()"/>
-				</div>
-			</div>
-			<hr />
-			<div class="changePart">
-				<div class='button' ng-click="changePart('platform')">platform</div>
-				<div class='button' ng-click="changePart('hall')">hall</div>
-				<div class='button' ng-click="changePart('room')">room</div>
-			</div>
-		</div>
+<div class="container">
+ 	<div class="row">
+ 		<div class="col-md-1"></div>
+ 		<div class="col-md-2">玩家名</div>
+ 		<div class="col-md-2">大厅</div>
+ 		<div class="col-md-2">房间</div>
+ 		<div class="col-md-2">游戏名</div>
+ 		<div class="col-md-2">游戏状态</div>
+ 		<div class="col-md-1"></div>
+ 	</div>
+</div>
+	<table table table-striped>
+		<thead>
+			<td>玩家名</td>
+			<td>大厅</td>
+			<td>房间</td>
+			<td>游戏名</td>
+			<td>游戏状态</td>
+		</thead>
+		<tbody>
+			<tr ng-repeat="p in playerList">
+				<td>{{p.name}}</td>
+				<td>{{p.hallName||'空'}}</td>
+				<td>{{p.roomName||'空'}}</td>
+				<td>{{p.gameName||'空'}}</td>
+				<td>{{['未进房间','待准备','已准备','游戏中'][p.gameStatus+1]}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="login">
+	<input ng-model="username" type="text" ></input>
+	<input ng-model="pwd" type="text" ></input>
+</div>
+<div class="buttonList">
+	<input type="button" value="login" ng-click="login()"/>
+	<input type="button" value="logout" ng-click="logout()"/>
+	<input type="button" value="update" ng-click="update()"/>
+	<input type="button" value="getPlayerList" ng-click="getPlayerList()"/>
+</div>
