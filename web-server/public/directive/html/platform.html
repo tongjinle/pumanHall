@@ -1,40 +1,79 @@
 <div class="container">
- 	<div class="row">
- 		<div class="col-md-1"></div>
- 		<div class="col-md-2">玩家名</div>
- 		<div class="col-md-2">大厅</div>
- 		<div class="col-md-2">房间</div>
- 		<div class="col-md-2">游戏名</div>
- 		<div class="col-md-2">游戏状态</div>
- 		<div class="col-md-1"></div>
- 	</div>
-</div>
-	<table table table-striped>
-		<thead>
-			<td>玩家名</td>
-			<td>大厅</td>
-			<td>房间</td>
-			<td>游戏名</td>
-			<td>游戏状态</td>
-		</thead>
-		<tbody>
-			<tr ng-repeat="p in playerList">
-				<td>{{p.name}}</td>
-				<td>{{p.hallName||'空'}}</td>
-				<td>{{p.roomName||'空'}}</td>
-				<td>{{p.gameName||'空'}}</td>
-				<td>{{['未进房间','待准备','已准备','游戏中'][p.gameStatus+1]}}</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<div class="login">
-	<input ng-model="username" type="text" ></input>
-	<input ng-model="pwd" type="text" ></input>
-</div>
-<div class="buttonList">
-	<input type="button" value="login" ng-click="login()"/>
-	<input type="button" value="logout" ng-click="logout()"/>
-	<input type="button" value="update" ng-click="update()"/>
-	<input type="button" value="getPlayerList" ng-click="getPlayerList()"/>
+	<!-- <div class="row">
+		<div class="col-md-2"><span class="label label-primary">玩家名</span></div>
+		<div class="col-md-2"><span class="label label-primary">大厅</span></div>
+		<div class="col-md-2"><span class="label label-primary">房间</span></div>
+		<div class="col-md-2"><span class="label label-primary">游戏名</span></div>
+		<div class="col-md-2"><span class="label label-primary">游戏状态</span></div>
+		<div class="col-md-2"></div>
+	</div> -->
+	<div class="row">
+		<div class="col-md-10">
+			<h1>扑满-游戏平台 </h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+			<h2>
+			
+				<span class="label" ng-class="{true:'label-success',false:'label-default'}[!!player]">{{player?player.name:'未登录'}}</span > 
+			</h2>	
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4" ng-show="player">
+			<div class="btn-group" role="group" aria-label="...">
+				<button type="button" ng-click="changePart('userList')" class="btn" ng-class="{true:'btn-primary',false:'btn-default'}[part=='userList']">用户列表</button>
+				<button type="button" ng-click="changePart('hallList')" class="btn" ng-class="{true:'btn-primary',false:'btn-default'}[part=='hallList']">大厅列表</button>
+			</div>
+		</div>
+	</div>
+	<div class="row" ng-show="player && part=='userList'">
+		<div class="col-md-12">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<td><span class="label label-primary">玩家名</span></td>
+						<td><span class="label label-primary">大厅</span></td>
+						<td><span class="label label-primary">房间</span></td>
+						<td><span class="label label-primary">游戏名</span></td>
+						<td><span class="label label-primary">游戏状态</span></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="p in playerList">
+						<td><span class="label" ng-class="{true:'label-success',false:'label-default'}[player.name == p.name]">{{p.name}}</span></td>
+						<td>{{p.hallName||'空'}}</td>
+						<td>{{p.roomName||'空'}}</td>
+						<td>{{p.gameName||'空'}}</td>
+						<td>{{['未进房间','待准备','已准备','游戏中'][p.gameStatus+1]}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+	</div>
+	<div class="row" ng-show="!player">
+		<div class="col-md-3">
+			<form>
+				<div class="form-group">
+					<label for="username">用户名:</label>
+					<input ng-model="username" type="text" class="form-control" id="username" placeholder="username">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputPassword1">密码:</label>
+					<input ng-model="pwd" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+				</div>
+			</form>
+		</div>
+	</div>
+	<hall></hall>
+	<div class="row">
+		<div class="col-md-6">
+			<input ng-show="!player" class="btn btn-default" type="button" value="login" ng-click="login()"/>
+			<input ng-show="player" class="btn btn-default" type="button" value="logout" ng-click="logout()"/>
+			<input ng-show="player" class="btn btn-default" type="button" value="update" ng-click="update()"/>
+			<input ng-show="player" class="btn btn-default" type="button" value="getPlayerList" ng-click="getPlayerList()"/>
+		</div>
+	</div>
 </div>

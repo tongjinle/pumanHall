@@ -19,6 +19,7 @@ requirejs.config({
 
 		// ctrl
 		"ctrl-platformpage":"controller/platformpageCtrl",
+		"ctrl-testpage":"controller/testpageCtrl",
 
 		// directive
 		"directive-platform":"directive/script/platform",
