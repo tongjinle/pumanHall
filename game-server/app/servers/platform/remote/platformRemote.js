@@ -64,6 +64,15 @@ var Handler = (function(){
 				var msg = uid;
 				var channel = self._channelName;
 				self.app.rpc.message.messageRemote.send(null,route,msg,channel,cb);
+			},
+			function(cb){
+				// quitHall
+				var user =  self.platformService.getUser(uid);
+				if(user.hallName){
+					self.app.rpc.hall.hallRemote.quitHall(user.hallName,uid,cb);
+					return;
+				}
+				cb();
 			}
 		],function(err,data){
 			next();

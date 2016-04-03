@@ -7,8 +7,8 @@ var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
 		this.hall = this.app.get('hall');
-		// this.hall = new Hall(this.app.get)
-		// console.error('-->',app.curServer);
+		console.error('-->',this.hall);
+		console.error('-->',app.curServer);
 	};
 
 	var staticHandler = cls;
@@ -34,14 +34,14 @@ var Handler = (function(){
 			function(cb){
 				// 加入chat频道
 				var channelName = self.hall.name;
-				self.app.rpc.message.messageRemote.addUser(channelName,uid,sid,cb);
+				self.app.rpc.message.messageRemote.addUser(null,channelName,uid,sid,cb);
 			},
 			function(cb){
 				// 告知hall中其他成员,有新成员的加入
 				var route = 'hall.addUser';
 				var msg = {username:uid};
 				var channelName = self.hall.name;
-				self.app.rpc.message.messageRemote.send(route,msg,channelName,cb);
+				self.app.rpc.message.messageRemote.send(null,route,msg,channelName,cb);
 			},
 			function(cb){
 				// 通知platform中user状态的改变

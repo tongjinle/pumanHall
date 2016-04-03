@@ -39,6 +39,8 @@ define([
 				};
 
 				$scope.listen = function(){
+					var self = this;
+
 					$scope.$on('gate.afterQuery',function(e,args){
 						var connectorHost = args.host;
 						var connectorPort = args.port;
@@ -61,8 +63,8 @@ define([
 
 					$scope.$on('afterLogin',function(e,args){
 						$scope.changePart('hallList');
-						// $scope.getHallList();
-						$scope.$broadcast('initHallList');
+						$scope.getHallList();
+						// $scope.$broadcast('initHallList');
 					});
 
 					// chat要求发送消息
@@ -126,6 +128,19 @@ define([
 							chat:chat
 						});
 
+						$scope.$apply();
+					});
+
+					pomelo.on('platform.updateUser',function(user){
+						_.find($scope.playerList,function(n,i){
+							if(n.name == user.name){
+								$scope.playerList[i] = user;
+								return true;
+							}
+						});
+						if($scope.player && $scope.player.name == user.name){
+							$scope.player = user;
+						}
 						$scope.$apply();
 					});
 
@@ -238,6 +253,58 @@ define([
 					pomelo.request(route,msg,function(data){
 					});
 				};
+
+				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				// HALL
+				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				
+				// 大厅列表
+				$scope.hallList = [];
+				// 当前大厅
+				$scope.hall = null;
+				// 大厅聊天记录
+				$scope.hallChatList = [];
+
+				// 获取大厅列表
+				$scope.getHallList = function(){
+					var route = 'platform.platformHandler.getHallList';
+					var msg = {};
+					pomelo.request(route,msg,function(data){
+						console.warn('getHallList',data);
+						$scope.hallList = data;
+						$scope.$apply();
+					});
+				};
+
+				// 进入大厅
+				$scope.enterHall = function(hallName){
+					var route = 'platform.platformHandler.enterHall';
+					var msg = {
+						hallName:hallName
+					};
+					pomelo.request(route,msg,function(data){
+						console.log('after enterHall',data);
+						if(data.code == 200){
+							$scope.hallName = hallName;
+						}
+						$scope.$apply();
+
+					});
+				};
+
+				// 退出大厅
+				$scope.quitHall = function(){
+					var route = 'hall.hallHandler.quitHall';
+					var route = 'hall.hallHandler.test';
+					var msg = {};
+					var hallName = $scope.hallName;
+					pomelo.request(route,msg,function(data){
+						console.log('after quitHall',data);
+					});
+				};
+
+				// 聊天
+				$scope.chatInHall = function(){};
 
 
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -6,6 +6,8 @@ var _ = require('underscore');
 var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
+
+		console.error('******',app.curServer);
 	};
 
 	var staticHandler = cls;
@@ -89,7 +91,9 @@ var Handler = (function(){
 		var hallName = msg.hallName;
 		var uid = session.uid;
 		var sid = session.sid;
-		self.app.rpc.hall.hallRemote.enterHall(hallName,uid,sid,next);
+		self.app.rpc.hall.hallRemote.enterHall(hallName,uid,sid,function(err){
+			next(null,{code:!err?200:500});
+		});
 	};
 
 

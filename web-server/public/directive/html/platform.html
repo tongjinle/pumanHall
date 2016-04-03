@@ -1,11 +1,11 @@
 <div class="container">
 	<!-- <div class="row">
-		<div class="col-md-2"><span class="label label-primary">玩家名</span></div>
-		<div class="col-md-2"><span class="label label-primary">大厅</span></div>
-		<div class="col-md-2"><span class="label label-primary">房间</span></div>
-		<div class="col-md-2"><span class="label label-primary">游戏名</span></div>
-		<div class="col-md-2"><span class="label label-primary">游戏状态</span></div>
-		<div class="col-md-2"></div>
+					<div class="col-md-2"><span class="label label-primary">玩家名</span></div>
+					<div class="col-md-2"><span class="label label-primary">大厅</span></div>
+					<div class="col-md-2"><span class="label label-primary">房间</span></div>
+					<div class="col-md-2"><span class="label label-primary">游戏名</span></div>
+					<div class="col-md-2"><span class="label label-primary">游戏状态</span></div>
+					<div class="col-md-2"></div>
 	</div> -->
 	<div class="row">
 		<div class="col-md-10">
@@ -16,19 +16,20 @@
 		<div class="col-md-2">
 			<h2>
 			
-				<span class="label" ng-class="{true:'label-success',false:'label-default'}[!!player]">{{player?player.name:'未登录'}}</span > 
-			</h2>	
+		<span class="label" ng-class="{true:'label-success',false:'label-default'}[!!player]">{{player?player.name:'未登录'}}</span >
+		</h2>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4" ng-show="player">
+		<div class="btn-group" role="group" aria-label="...">
+			<button type="button" ng-click="changePart('userList')" class="btn" ng-class="{true:'btn-primary',false:'btn-default'}[part=='userList']">用户列表</button>
+			<button type="button" ng-click="changePart('hallList')" class="btn" ng-class="{true:'btn-primary',false:'btn-default'}[part=='hallList']">大厅列表</button>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-md-4" ng-show="player">
-			<div class="btn-group" role="group" aria-label="...">
-				<button type="button" ng-click="changePart('userList')" class="btn" ng-class="{true:'btn-primary',false:'btn-default'}[part=='userList']">用户列表</button>
-				<button type="button" ng-click="changePart('hallList')" class="btn" ng-class="{true:'btn-primary',false:'btn-default'}[part=='hallList']">大厅列表</button>
-			</div>
-		</div>
-	</div>
-	<div class="row" ng-show="player && part=='userList'">
+</div>
+<div class="user" ng-show="part=='userList'">
+	<div class="row" ng-show="player">
 		<div class="col-md-12">
 			<table class="table table-striped">
 				<thead>
@@ -51,7 +52,6 @@
 				</tbody>
 			</table>
 		</div>
-		
 	</div>
 	<div class="row" ng-show="!player">
 		<div class="col-md-3">
@@ -67,7 +67,6 @@
 			</form>
 		</div>
 	</div>
-	<hall></hall>
 	<div class="row">
 		<div class="col-md-6">
 			<input ng-show="!player" class="btn btn-default" type="button" value="login" ng-click="login()"/>
@@ -75,5 +74,36 @@
 			<input ng-show="player" class="btn btn-default" type="button" value="update" ng-click="update()"/>
 			<input ng-show="player" class="btn btn-default" type="button" value="getPlayerList" ng-click="getPlayerList()"/>
 		</div>
+	</div>
+</div>
+<div class="row" ng-show="player && part=='hallList'">
+	<table  class="table table-striped">
+		<thead>
+			<tr>
+				<td><span class="label label-primary">大厅名</span></td>
+				<td><span class="label label-primary">游戏名</span></td>
+				<td><span class="label label-primary">房间数量</span></td>
+				<td><span class="label label-primary">人数</span></td>
+				<td><span class="label label-primary">状态</span></td>
+				<td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="n in hallList">
+					<td>
+						<span class="hallEntry label" ng-click="enterHall(n.hallName)" ng-class="{true:'label-success',false:'label-default'}[!!(hallName==n.hallName)]">
+							{{n.hallName}}
+						</span>
+						<span ng-click="quitHall()" ng-show="hallName==n.hallName" class=" hallExit glyphicon glyphicon-remove">
+							
+						</span> 	
+					</td>
+					<td>{{n.gameName}}</td>
+					<td>0</td>
+					<td>{{n.userCount}}</td>
+					<td>{{n.status}}</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>
