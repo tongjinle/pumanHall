@@ -6,6 +6,7 @@ var _ = require('underscore');
 var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
+		this.platformService = this.app.get('platformService');
 	};
 
 	var staticHandler = cls;
@@ -85,13 +86,20 @@ var Handler = (function(){
 
 	publicHandler.enterHall = function(msg,session,next){
 		var self = this;
+
+		// 是否已经在hall中
+		var uid = session.uid;
+		var user = self.platformService.getUser(uid);
+		if(user && user.hallName){
+			next();
+			return;
+		}
+
 		session.set('hallName',msg.hallName);
 		session.push('hallName');
 		var uid = session.uid;
 		var sid = session.get('sid');
-		self.app.rpc.hall.hallRemote.enterHall(session,uid,sid,function(err){
-			next(null,{code:!err?200:500});
-		});
+		self.app.rpc.hall.hallRemote.enterHall(session,uid,sid,next);
 	};
 
 
