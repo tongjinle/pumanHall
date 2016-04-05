@@ -137,8 +137,8 @@ module.exports = function(app) {
 // 					session.unbind(session.uid,cb);
 // 				},
 // 				function(cb){
-// 					self.app.rpc.user.userRemote.getPlayerList(session,function(err,data){
-// 						console.warn('userRemote getPlayerList:',_.map(data,function(n){return n.name;}));
+// 					self.app.rpc.user.userRemote.getUserList(session,function(err,data){
+// 						console.warn('userRemote getUserList:',_.map(data,function(n){return n.name;}));
 // 						cb();
 // 					});
 // 				},

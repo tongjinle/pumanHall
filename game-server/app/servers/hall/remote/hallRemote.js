@@ -7,8 +7,8 @@ var Handler = (function(){
 	var cls = function(app) {
 		this.app = app;
 		this.hall = this.app.get('hall');
-		console.error('-->',this.hall);
-		console.error('-->',app.curServer);
+		// console.error('-->',this.hall);
+		// console.error('-->',app.curServer);
 	};
 
 	var staticHandler = cls;
@@ -29,26 +29,51 @@ var Handler = (function(){
 
 	publicHandler.enterHall = function(uid,sid,next){
 		var self = this;
+		var hall = self.hall;
+		var hallName = hall.name;
 		
 		async.series([
 			function(cb){
-				// 加入chat频道
-				var channelName = self.hall.name;
-				self.app.rpc.message.messageRemote.addUser(null,channelName,uid,sid,cb);
+				// hall.addUser(uid);
+				async.waterfall([
+					function(cb2){
+						self.app.rpc.platform.platformRemote.getUser(null,uid,cb2);
+					},
+					function(user,cb2){
+						user.hallName = hallName;
+						user.gameName = hall.gameName;
+						hall.addUser(user);
+						cb2();
+					},
+					function(cb2){
+						// 加入chat频道
+						var channelName = hallName;
+ 						self.app.rpc.message.messageRemote.addUser(null,channelName,uid,sid,cb2);
+					}
+				],cb);
 			},
 			function(cb){
 				// 告知hall中其他成员,有新成员的加入
 				var route = 'hall.addUser';
-				var msg = {username:uid};
-				var channelName = self.hall.name;
+				var msg = {hallName:hallName,username:uid};
+				var channelName = hallName;
 				self.app.rpc.message.messageRemote.send(null,route,msg,channelName,cb);
-			},
-			function(cb){
+			}
+			,
+			function(cb2){
 				// 通知platform中user状态的改变
-				var changes = {
-					hallName:self.hall.name
-				};
-				self.app.rpc.platform.platformRemote.updateUser(null,uid,changes,cb);
+				var user = hall.getUser(uid);
+				var changes = {hallName:user.hallName,gameName:user.gameName};
+				self.app.rpc.platform.platformRemote.updateUser(null,uid,changes,cb2);
+			}
+			,
+			function(cb){
+				// 告知platform中所有成员,有新成员的加入
+				self.app.rpc.hall.hallRemote.getInfo(hallName,function(err,info){
+					var route = 'platform.refreshHall';
+					var msg = info;
+					self.app.rpc.platform.platformRemote.broadcast(null,route,msg,cb);
+				});
 			}
 		],next);
 
@@ -57,26 +82,42 @@ var Handler = (function(){
 
 	publicHandler.quitHall = function(uid,next){
 		var self = this;
+		var hall = self.hall;
+		var hallName = hall.name;
 
 		async.series([
 			function(cb){
-				// 离开chat频道
-				var channelName = self.hall.name;
-				self.app.rpc.message.messageRemote.removeUser(channelName,uid,cb);
+				hall.removeUser(uid);
+				cb();
 			},
 			function(cb){
-				// 告知hall中其他成员,有新成员的加入
+				// 离开chat频道
+				var channelName = self.hall.name;
+				self.app.rpc.message.messageRemote.removeUser(null,channelName,uid,cb);
+			},
+			function(cb){
+				// 告知hall中其他成员,有新成员的退出
 				var route = 'hall.removeUser';
 				var msg = {username:uid};
 				var channelName = self.hall.name;
-				self.app.rpc.message.messageRemote.send(route,msg,channelName,cb);
+				self.app.rpc.message.messageRemote.send(null,route,msg,channelName,cb);
 			},
 			function(cb){
 				// 通知platform中user状态的改变
 				var changes = {
-					hallName:null
+					hallName:null,
+					gameName:null,
 				};
 				self.app.rpc.platform.platformRemote.updateUser(null,uid,changes,cb);
+			},
+			function(cb){
+				
+			// 告知platform中所有成员,有新成员的退出
+				self.app.rpc.hall.hallRemote.getInfo(hallName,function(err,info){
+					var route = 'platform.refreshHall';
+					var msg = info;
+					self.app.rpc.platform.platformRemote.broadcast(null,route,msg,cb);
+				});
 			}
 		],next);
 	};
@@ -98,6 +139,9 @@ var Handler = (function(){
 
 	}
 
+
+	publicHandler.notifyPlatform = function(){};
+
 	return cls;
 
 }).call(this);
@@ -113,7 +157,7 @@ module.exports = function(app) {
 
 // var _ = require('underscore');
 // var async = require('async');
-// var PlayerMgr = require('../../../../logic/playerMgr');
+// var UserMgr = require('../../../../logic/userMgr');
 // var HallMgr = require('../../../../logic/hallMgr');
 
 // var Handler = (function(){
@@ -164,7 +208,7 @@ module.exports = function(app) {
 // 				// 大厅游戏
 // 				gameName:n.gameName,
 // 				// 大厅人数
-// 				playerCount:n.playerList.count(),
+// 				userCount:n.userList.count(),
 // 				// 大厅状态
 // 				status:n.status
 // 			};
@@ -181,16 +225,16 @@ module.exports = function(app) {
 // 	publicHandler._getHall = function(username){
 // 		var self = this;
 // 		return _.find(self.hallMgr.find(),function(hall){
-// 			return hall.findPlayer(username);
+// 			return hall.findUser(username);
 // 		});
 // 	};
 
 // 	// 找到玩家信息
-// 	publicHandler._getPlayer = function(username){
+// 	publicHandler._getUser = function(username){
 // 		var self = this;
 // 		var p=null;
 // 		_.find(self.hallMgr.find(),function(hall){
-// 			p = hall.findPlayer(username);
+// 			p = hall.findUser(username);
 // 			return true;
 // 		});
 // 		return p;
@@ -199,19 +243,19 @@ module.exports = function(app) {
 
 // 	// public
 // 	// 进入大厅
-// 	publicHandler.enterHall = function(player,hallName,sid,next){
+// 	publicHandler.enterHall = function(user,hallName,sid,next){
 // 		var self = this;
 // 		var channel = self.channelService.getChannel('userCenter');
 // 		console.error('abc',channel.getMembers());
 // 		channel.pushMessage('abc',channel.getMembers());
-// 		channel.pushMessage('getPlayerList',312);
+// 		channel.pushMessage('getUserList',312);
 // 		// console.warn('>>>>>>>>>>>>>>>>>>>>>>>>>');
 // 		// console.warn('>>>>>>>>>>>>>>>>>>>>>>>>>',channel);
 // 		// console.warn(self.channelService.channels);
 // 		async.series({
 // 			// 退出大厅(可能用户已经在别的大厅)
 // 			'quitHall':function(cb){
-// 				self.quitHall(player.name,sid,function(){
+// 				self.quitHall(user.name,sid,function(){
 // 					cb();
 // 				});
 // 			},
@@ -219,14 +263,14 @@ module.exports = function(app) {
 // 			'enterHall':function(cb){
 // 				var hall = self.hallMgr.find(hallName);
 // 				if(hall){
-// 					var p = hall.playerList.add(player.name,player);
+// 					var p = hall.userList.add(user.name,user);
 // 					if(p){
 // 						var channel = self._getChannelByHall(hall);
-// 						channel.add(player.name,sid);
-// 						// self.channelService.pushMessageByUids('hall.getPlayerList',self._getHallList(),[{uid:player.name,sid:sid}]);
+// 						channel.add(user.name,sid);
+// 						// self.channelService.pushMessageByUids('hall.getUserList',self._getHallList(),[{uid:user.name,sid:sid}]);
 // 						channel.pushMessage('hall.getList',self._getHallList());
-// 						console.warn('players in hall-------->>',self._getHallList());
-// 						// channel.pushMessage('hall.addPlayer',p);
+// 						console.warn('users in hall-------->>',self._getHallList());
+// 						// channel.pushMessage('hall.addUser',p);
 // 						cb(null);
 // 					}else{
 // 						cb(true,{code:errorCodeDict.PLAYER_NOT_EXIST});
@@ -245,7 +289,7 @@ module.exports = function(app) {
 // 					hallName:hall.name,
 // 					gameName:hall.gameName
 // 				};
-// 				self.app.rpc.user.userRemote.update(null,player.name,changes,cb);
+// 				self.app.rpc.user.userRemote.update(null,user.name,changes,cb);
 // 				// cb();
 // 			}
 // 		},function(err,data){
@@ -266,10 +310,10 @@ module.exports = function(app) {
 // 			'quitHall':function(cb){
 // 				var hall = self._getHall(username);
 // 				if(hall){
-// 					var p = hall.playerList.remove(username);
+// 					var p = hall.userList.remove(username);
 // 					if(p){
 // 						var channel = self._getChannelByHall(hall);
-// 						// channel.push('hall.removePlayer',p);
+// 						// channel.push('hall.removeUser',p);
 // 						channel.pushMessage('hall.getList',self._getHallList());
 // 						cb(null,p);
 // 					}else{
@@ -281,7 +325,7 @@ module.exports = function(app) {
 // 			},
 // 			// 更新用户中心
 // 			'updateUser':function(cb){
-// 				var player = self._getPlayer(username);
+// 				var user = self._getUser(username);
 // 				var changes = {
 // 					hallId:-1,
 // 					hallName:null,

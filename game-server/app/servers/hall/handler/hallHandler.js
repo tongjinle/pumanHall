@@ -35,19 +35,8 @@ var Handler = (function() {
 		console.error('hallHandler.quitHall');
 		console.error(username,hallName);
 		var sid = session.get('sid');
-		next();
-		return;
-		self.app.rpc.hall.hallRemote.quitHall(hallName,username,sid,next);
+		self.app.rpc.hall.hallRemote.quitHall(hallName,username,next);
 	};
-
-	// // 获取大厅列表
-	// publicHandler.getHallList = function(msg,session,next){
-	// 	var self = this;
-	// 	console.error('self.hall.name');
-	// 	console.error(self.hall.name);
-	// 	var hallName = self.hall.name;
-	// 	self.app.rpc.hall.hallRemote.getHallList(hallName,next);
-	// };
 
 	publicHandler.test = function(msg,session,next){
 		console.error('hallHandler.test');

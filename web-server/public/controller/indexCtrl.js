@@ -5,7 +5,7 @@ app.controller('hallCtrl', ['$scope', function($scope) {
 
 	$scope.username = 'dino';
 	$scope.pwd='test123';
-	$scope.playerList = [];
+	$scope.userList = [];
 
 
 	
@@ -46,7 +46,7 @@ app.controller('hallCtrl', ['$scope', function($scope) {
 			$scope.$apply();
 		});
 
-		// 设置player
+		// 设置user
 		$scope.$on('afterLogin',function(e,args){
 			var user = args;
 			$scope.getPlayerList();
@@ -72,17 +72,17 @@ app.controller('hallCtrl', ['$scope', function($scope) {
 		});
 
 		// 设置chat参数
-		$scope.$watch('playerList.length',function(nv,ov){
-			if($scope.player){
-				$scope.setChatter('platform',$scope.player.name);
-				$scope.refreshMates('platform',$scope.playerList);
+		$scope.$watch('userList.length',function(nv,ov){
+			if($scope.user){
+				$scope.setChatter('platform',$scope.user.name);
+				$scope.refreshMates('platform',$scope.userList);
 			}
 		},true);
 
-		$scope.$watch('player',function(){
-			if($scope.player){
-				$scope.setChatter('platform',$scope.player.name);
-				$scope.refreshMates('platform',$scope.playerList);
+		$scope.$watch('user',function(){
+			if($scope.user){
+				$scope.setChatter('platform',$scope.user.name);
+				$scope.refreshMates('platform',$scope.userList);
 			}
 		});
 
@@ -94,22 +94,22 @@ app.controller('hallCtrl', ['$scope', function($scope) {
 
 
 		pomelo.on('platform.addUser', function(user) {
-			$scope.playerList.push(user);
+			$scope.userList.push(user);
 			
 			if($scope.username == user.name){
-				$scope.player = user;
+				$scope.user = user;
 				$scope.$emit('afterLogin',user);
 			}
 
-			console.warn('after addPlayer->', $scope.playerList);
+			console.warn('after addPlayer->', $scope.userList);
 			$scope.$apply();
 		});
 
 		pomelo.on('platform.removeUser', function(uid) {
-			$scope.playerList = _.filter($scope.playerList, function(n) {
+			$scope.userList = _.filter($scope.userList, function(n) {
 				return n.name != uid;
 			});
-			console.warn('after removePlayer->', $scope.playerList);
+			console.warn('after removePlayer->', $scope.userList);
 			$scope.$apply();
 		});
 
@@ -151,7 +151,7 @@ app.controller('hallCtrl', ['$scope', function($scope) {
 		};
 
 		// 默认先登出
-		$scope.player = null;
+		$scope.user = null;
 		pomelo.request(route, msg, function(data){
 			console.warn(data);
 		});
@@ -164,9 +164,9 @@ app.controller('hallCtrl', ['$scope', function($scope) {
 		pomelo.request(route, msg, function(data) {
 			console.log(data);
 			if(data.code == 200){
-				$scope.player = null;
-				// 因为已经登出,所以playerList自动清空
-				$scope.playerList = [];
+				$scope.user = null;
+				// 因为已经登出,所以userList自动清空
+				$scope.userList = [];
 				$scope.$apply();
 			}
 		});
@@ -192,7 +192,7 @@ app.controller('hallCtrl', ['$scope', function($scope) {
 		var msg = {};
 		pomelo.request(route, msg, function(data) {
 			console.warn('getPlayerList:', data);
-			$scope.playerList = data;
+			$scope.userList = data;
 			$scope.$apply();
 		});
 	};
@@ -210,10 +210,10 @@ app.controller('hallCtrl', ['$scope', function($scope) {
 
 
 	// 刷新聊天列表
-	$scope.refreshMates = function(chatName,playerList) {
+	$scope.refreshMates = function(chatName,userList) {
 		// 必须已经登录
-		if($scope.player){
-			var mates = _.without(_.map($scope.playerList,function(n){return n.name;}),$scope.username);
+		if($scope.user){
+			var mates = _.without(_.map($scope.userList,function(n){return n.name;}),$scope.username);
 			mates.unshift('*');
 
 
@@ -259,7 +259,7 @@ app.controller('hallCtrl', ['$scope', function($scope) {
 	$scope.enterHall = function(hallName){
 		var route = 'hall.hallHandler.enterHall';
 		var msg = {
-			player:$scope.player,
+			user:$scope.user,
 			hallName:hallName
 		};
 		pomelo.request(route,msg,function(data){

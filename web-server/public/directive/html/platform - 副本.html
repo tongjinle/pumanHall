@@ -4,7 +4,7 @@
 					<div class="img"></div>
 				</div>
 			</div>
-			<div class="loginStatus" ng-class="{'login':player,'logout':!player}">{{player?player.name:'未登录'}}</div>
+			<div class="loginStatus" ng-class="{'login':user,'logout':!user}">{{user?user.name:'未登录'}}</div>
 			<div class="g-background">
 				<div class="g-content">
 					<table >
@@ -16,7 +16,7 @@
 							<td>游戏状态</td>
 						</thead>
 						<tbody>
-							<tr ng-repeat="p in playerList">
+							<tr ng-repeat="p in userList">
 								<td>{{p.name}}</td>
 								<td>{{p.hallName||'空'}}</td>
 								<td>{{p.roomName||'空'}}</td>

@@ -8,7 +8,7 @@ var Hall = (function(){
 		this.id = _.uniqueId();
 		this.name = hallName;
 		this.roomList = new Dict();
-		this.playerList = new Dict();
+		this.userList = new Dict();
 		this.status = status || 'open';
 		this.gameName = gameName;
 	};
@@ -46,23 +46,23 @@ var Hall = (function(){
 	};
 
 	// 增加一个玩家
-	publicHandler.addPlayer = function(player){
+	publicHandler.addUser = function(user){
 		var self = this;
-		var p = self.playerList.add(player.name,player);
+		var p = self.userList.add(user.name,user);
 		return p;
 	};
 
 	// 删除一个玩家
-	publicHandler.removePlayer = function(username){
+	publicHandler.removeUser = function(username){
 		var self = this;
-		var p = self.playerList.remove(username);
+		var p = self.userList.remove(username);
 		return p;
 	};
 
 	// 寻找玩家
-	publicHandler.findPlayer = function(username){
+	publicHandler.getUser = function(username){
 		var self = this;
-		return self.playerList.get(username);
+		return self.userList.get(username);
 	};
 
 
@@ -73,7 +73,7 @@ var Hall = (function(){
 			hallName:self.name,
 			gameName:self.gameName,
 			status:self.status,
-			userCount:self.playerList.count()
+			userCount:self.userList.count()
 		};
 	};
 

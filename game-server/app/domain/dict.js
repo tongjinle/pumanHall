@@ -1,5 +1,5 @@
 // 基础类
-// playerMgr,hall,room在一定的程度上,都是list
+// userMgr,hall,room在一定的程度上,都是list
 
 var _ = require('underscore');
 
