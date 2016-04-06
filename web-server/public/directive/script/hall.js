@@ -1,16 +1,19 @@
 define([
 	'app',
-	'underscore'
+	'underscore',
+	'filter-gameStatus'
 	],function(app,_){
 	app.directive('hall',['$routeParams',function($routeParams){
 		return {
 			restrict:'E',
+			scope:{},
 			templateUrl:'./directive/html/hall.html',
 			link:function($scope,$element,$attrs){
-				$scope.username = $routeParams.username;
-				$scope.hallName = $routeParams.hallName;
+				$scope.username = null;/*$routeParams.username;*/
+				$scope.hallName = null;/*$routeParams.hallName;*/
 				$scope.userList = null;
 				$scope.roomList = null;
+				$scope.chatName = "hall";
 				
 				// chat
 				$scope.reciver = null;
@@ -20,7 +23,11 @@ define([
 				// query info of hall
 				$scope.getInfo = function(){
 					pomelo.request('hall.hallHandler.getInfo',function(data){
+						console.log('hall.hallHandler.getInfo',data);
+						$scope.userList = data.userList;
+						$scope.roomList = data.roomList;
 
+						$scope.$apply();
 					});
 				};
 
@@ -37,7 +44,7 @@ define([
 				// init chat
 				$scope.initChat = function(){
 					var username = $scope.username;
-					var chatName = $scope.hallName;
+					var chatName = $scope.chatName;
 					$scope.$broadcast('chat.setUsername',{name:chatName,username:username});
 				};
 
@@ -46,6 +53,17 @@ define([
 					////////////////////////////////////////////////////////////////////////////////
 					// on
 					////////////////////////////////////////////////////////////////////////////////
+
+					$scope.$on('hall.setMeta',function(e,args){
+						$scope.username = args.username;
+						$scope.hallName = args.hallName;
+						
+						$scope.getInfo();
+						$scope.initChat();
+
+					});
+
+
 					$scope.$on('chat.send',function(e,args){
 						var chatName = $scope.hallName;
 						var name = args.name;
@@ -70,7 +88,7 @@ define([
 					////////////////////////////////////////////////////////////////////////////////
 
 					pomelo.on('hall.chat',function(chat){
-						var chatName = $scope.hallName;
+						var chatName = $scope.chatName;
 						$scope.$broadcast('chat.afterSend',{
 							name:chatName,
 							chat:chat
@@ -78,13 +96,15 @@ define([
 
 						$scope.$apply();
 					});
+
+					pomelo.on('hall.addUser',function(user){
+						console.log('hall.addUser',user);
+					});
 				};
 
 				$scope.listen();
 
-				$scope.initChat();
 
-				$scope.getInfo();
 			}
 		};
 	}]);

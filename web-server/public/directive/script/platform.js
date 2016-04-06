@@ -5,6 +5,7 @@ define([
 	app.directive('platform',['$location',function($location){
 		return {
 			restrict:'E',
+			scope:{},
 			templateUrl:'./directive/html/platform.html',
 			link:function($scope,$element,$attrs){
 
@@ -79,22 +80,6 @@ define([
 						pomelo.request(route,msg,function(data){
 						});
 					});
-
-					// 设置chat参数
-					$scope.$watch('userList.length',function(nv,ov){
-						if($scope.user){
-							$scope.setChatter('platform',$scope.user.name);
-							$scope.refreshMates('platform',$scope.userList);
-						}
-					},true);
-
-					$scope.$watch('user',function(){
-						if($scope.user){
-							$scope.setChatter('platform',$scope.user.name);
-							$scope.refreshMates('platform',$scope.userList);
-						}
-					});
-
 
 					////////////////////////////////////////////////////
 					// pomelo on
@@ -229,40 +214,7 @@ define([
 					});
 				};
 
-				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-				// 设置聊天者'我'
-				$scope.setChatter = function(chatName,username){
-					var msg = {name:chatName,username:username};
-					$scope.$broadcast('chat.setUsername',msg);
-				};
-
-
-				// 刷新聊天列表
-				$scope.refreshMates = function(chatName,userList) {
-					// 必须已经登录
-					if($scope.user){
-						var mates = _.without(_.map($scope.userList,function(n){return n.name;}),$scope.username);
-						mates.unshift('*');
-
-
-						var msg = {name:chatName,mates:mates};
-						$scope.$broadcast('chat.setMates',msg);
-					}
-				};
-
-				// 发送信息
-				$scope.send = function(){
-					var route = 'platform.platformHandler.chat';
-					var msg = {
-						reciver:$scope.reciver,
-						content:$scope.content
-					};
-					pomelo.request(route,msg,function(data){
-					});
-				};
+			
 
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				// HALL
@@ -298,7 +250,13 @@ define([
 						// 	$scope.hallName = hallName;
 						// }
 						// $scope.$apply();
+						$scope.$emit('changePart',{
+							part:'hall',
+							hallName:$scope.user.hallName,
+							username:$scope.username
+						});
 
+						$scope.$apply();
 					});
 				};
 

@@ -16,7 +16,7 @@ define(["app",
 						templateUrl:"view/platformpage.html",
 						controller:"platformpageCtrl"
 					})
-					.when("/hall/:hallName/:userName",{
+					.when("/hall/:hallName/:username",{
 						templateUrl:"view/hallpage.html",
 						controller:"hallpageCtrl"
 					})

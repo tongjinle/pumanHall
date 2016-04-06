@@ -20,6 +20,7 @@ module.exports = function (grunt) {
 					'public/js/**/*.js', 
 					'public/script/**/*.js', 
 					'public/controller/**/*.js', 
+					'public/filter/**/*.js', 
 					'public/directive/script/**/*.js'
 				]  
 			},

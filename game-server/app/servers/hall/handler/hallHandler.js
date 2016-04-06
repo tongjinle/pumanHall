@@ -16,16 +16,6 @@ var Handler = (function() {
 	// private
 
 	// public
-	// 进入大厅
-	// publicHandler.enterHall = function(msg, session, next) {
-	// 	var self = this;
-	// 	var username = session.uid;
-	// 	var hallName = msg.hallName;
-	// 	var sid = session.get('sid');
-
-	// 	self.app.rpc.hall.hallRemote.enterHall(hallName,username,hallName,sid,next);
-	// };
-
 	// 退出大厅
 	publicHandler.quitHall = function(msg,session,next){
 		var self = this;
@@ -36,6 +26,13 @@ var Handler = (function() {
 		console.error(username,hallName);
 		var sid = session.get('sid');
 		self.app.rpc.hall.hallRemote.quitHall(hallName,username,next);
+	};
+
+	// 获取大厅消息
+	publicHandler.getInfo = function(msg,session,next){
+		var self = this;
+		var info = self.hall.getInfo('hall.simple');
+		next(null,info);
 	};
 
 	publicHandler.test = function(msg,session,next){

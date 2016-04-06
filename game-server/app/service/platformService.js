@@ -22,11 +22,7 @@ var Handler = (function(){
 		var self = this;
 		self.userList.add(uid,new User(uid));
 		
-		
-
 		console.log(self.userList);
-
-
 	};
 
 	publicHandler.removeUser = function(uid){

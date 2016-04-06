@@ -7,16 +7,31 @@
 	</div>
 	<div class="row">
 		<div class="userList col-md-3">
-			<ul>
-				<li ng-repeat="n in userList">
-					<span>{{n.username}}</span>
-					<span>{{n.roomName}}</span>
-					<span>{{n.status}}</span>
-				</li>
-			</ul>
+			<div class="row">
+				<div class="col-md-3">
+					<span class="label label-primary">用户名</span>
+				</div>
+				<div class="col-md-3">
+					<span class="label label-primary">房间名</span>
+				</div>
+				<div class="col-md-3">
+					<span class="label label-primary">状态</span>
+				</div>
+			</div>
+			<div class="row user" ng-repeat="n in userList">
+				<div class="col-md-3">
+					<span class="label" ng-class="{true:'label-success',false:'label-default'}[n.name == username]" >{{n.name}}</span>
+				</div>
+				<div class="col-md-3">
+					<span class="label label-default" >{{n.roomName||'空'}}</span>
+				</div>
+				<div class="col-md-3">
+					<span class="label label-default">{{n.gameStatus | gameStatus}}</span>
+				</div>
+			</div>
 		</div>
 		<div class="chatBoard col-md-6">
-			<chat name="{{hallName}}"></chat>
+			<chat name="hall"></chat>
 		</div>
 		<div class="roomList col-md-3">
 			<div class="room" ng-repeat="n in roomList">

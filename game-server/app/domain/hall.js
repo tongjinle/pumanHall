@@ -67,14 +67,43 @@ var Hall = (function(){
 
 
 	// 返回信息
-	publicHandler.getInfo = function(){
+	publicHandler.getInfo = function(type){
 		var self = this;
-		return {
-			hallName:self.name,
-			gameName:self.gameName,
-			status:self.status,
-			userCount:self.userList.count()
+		type = type || 'platform.simple';
+
+		var dict = {};
+		dict['platform.simple'] = function(){
+			return {
+				hallName:self.name,
+				gameName:self.gameName,
+				status:self.status,
+				userCount:self.userList.count()
+			};
 		};
+
+		dict['hall.simple'] = function(){
+			var userList = _.map(self.userList.get(),function(n){
+				return {
+					name:n.name,
+					roomName:n.roomName,
+					gameStatus:n.gameStatus
+				};
+			});
+			// var roomList = _.map(self.roomList,function(n){
+			// 	return {
+			// 		name:n.name,
+			// 		userCount:n.userList.length,
+			// 		status:n.status
+			// 	};
+			// });
+			var roomList = [];
+			return {
+				userList:userList,
+				roomList:roomList
+			};
+		};
+
+		return dict[type]();
 	};
 
 	return cls;

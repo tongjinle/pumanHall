@@ -14,6 +14,9 @@ requirejs.config({
 		route:"script/route",
 		app:"script/app",
 		
+		// filter
+		"filter-gameStatus":"filter/gameStatus",
+
 		// service
 		// "service-goods":"service/script/goods",
 
@@ -25,6 +28,7 @@ requirejs.config({
 		// directive
 		"directive-platform":"directive/script/platform",
 		"directive-hall":"directive/script/hall",
+		"directive-chat":"directive/script/chat",
 
 		// end tail
 		"jquery":"bower_components/jquery/dist/jquery.min"

@@ -35,21 +35,27 @@ var Handler = (function(){
 
 
 	publicHandler.removeUser = function(channelName,uid,next){
-		console.error('message.removeUser->','channelName,uid,next');
-		console.error('message.removeUser->',arguments);
+		// console.error('message.removeUser->','channelName,uid,next');
+		// console.error('message.removeUser->',arguments);
 		var self = this;
 
 		// channel
 		var channel = self.channelService.getChannel(channelName);
 		var sid = self.getSidByUid(uid);
+		// console.error('before message.removeUser');
+		// console.error(channel.getMembers());
 		if(channel && sid && channel.getMember(uid)){
+			// console.error('delete from channel');
+			// console.error(uid,sid);
 			channel.leave(uid,sid);
 		}
+		// console.error('after message.removeUser');
+		// console.error(channel.getMembers());
 
 		// uidMap
-		if(self.uidMap[uid]){
-			delete self.uidMap[uid];
-		}
+		// if(self.uidMap[uid]){
+		// 	delete self.uidMap[uid];
+		// }
 
 		next();
 	};
