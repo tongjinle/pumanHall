@@ -2,7 +2,7 @@ define([
 	'app',
 	'underscore'
 	],function(app,_){
-	app.directive('platform',[function(){
+	app.directive('platform',['$location',function($location){
 		return {
 			restrict:'E',
 			templateUrl:'./directive/html/platform.html',
@@ -315,6 +315,14 @@ define([
 
 				// 聊天
 				$scope.chatInHall = function(){};
+
+				// 转去"hall"页面
+				$scope.goHall = function(){
+					var username = $scope.username;
+					var user = _.find($scope.userList,function(n){return n.name == username;});
+					var hallName = user.hallName;
+					$location.path("/hall/:hallName/:username".replace(':hallName',hallName).replace(':username',username));
+				};
 
 
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

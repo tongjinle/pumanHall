@@ -19,10 +19,12 @@ requirejs.config({
 
 		// ctrl
 		"ctrl-platformpage":"controller/platformpageCtrl",
+		"ctrl-hallpage":"controller/hallpageCtrl",
 		"ctrl-testpage":"controller/testpageCtrl",
 
 		// directive
 		"directive-platform":"directive/script/platform",
+		"directive-hall":"directive/script/hall",
 
 		// end tail
 		"jquery":"bower_components/jquery/dist/jquery.min"

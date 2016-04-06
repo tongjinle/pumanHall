@@ -1,6 +1,7 @@
 define(["app",
 	"angularRoute",
 	'ctrl-platformpage',
+	'ctrl-hallpage',
 	'ctrl-testpage'
 	],
 	function(app){
@@ -10,6 +11,14 @@ define(["app",
 					.when("/",{
 						templateUrl:"view/platformpage.html",
 						controller:"platformpageCtrl"
+					})
+					.when("/platform",{
+						templateUrl:"view/platformpage.html",
+						controller:"platformpageCtrl"
+					})
+					.when("/hall/:hallName/:userName",{
+						templateUrl:"view/hallpage.html",
+						controller:"hallpageCtrl"
 					})
 					.when("/test",{
 						templateUrl:"view/testpage.html",

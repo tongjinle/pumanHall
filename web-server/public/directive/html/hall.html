@@ -1,0 +1,27 @@
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-10">
+			<h1>{{hallName}} </h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="userList col-md-3">
+			<ul>
+				<li ng-repeat="n in userList">
+					<span>{{n.username}}</span>
+					<span>{{n.roomName}}</span>
+					<span>{{n.status}}</span>
+				</li>
+			</ul>
+		</div>
+		<div class="chatBoard col-md-6">
+			<chat name="{{hallName}}"></chat>
+		</div>
+		<div class="roomList col-md-3">
+			<div class="room" ng-repeat="n in roomList">
+				<room-icon data="n"></room-icon>
+			</div>
+		</div>
+	</div>
+</div>
